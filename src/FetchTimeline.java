@@ -1,7 +1,6 @@
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
