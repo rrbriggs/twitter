@@ -7,19 +7,11 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class Main {
-    private static String CONSUMER_KEY;
-    private static String CONSUMER_SECRET_KEY;
-    private static String ACCESS_TOKEN;
-    private static String ACCESS_TOKEN_SECRET;
-
     public static void main(String[] args) throws IOException {
-
-        // populate tokens and keys from properties file
-        loadConfig();
+        int selection = 0;
 
         System.out.println("Welcome to the BrigBot Twitter Interface!");
 
-        int selection = 0;
 
         while (selection != 3) {
             System.out.println("Select from the following:\n 1: Write a tweet\n 2: View Timeline\n 3: Exit");
@@ -44,18 +36,15 @@ public class Main {
         }
     }
 
-    // populate keys and tokens from Config.properties
-    private static void loadConfig() throws IOException {
-        Properties properties = new Properties();
-        InputStream inputStream = new FileInputStream("Config.properties");
-        properties.load(inputStream);
-        CONSUMER_KEY = properties.getProperty("CONSUMER_KEY");
-        CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
-        ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
-        ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
-    }
+    private Twitter getTwitterInstance() throws IOException {
+        String CONSUMER_KEY;
+        String CONSUMER_SECRET_KEY;
+        String ACCESS_TOKEN;
+        String ACCESS_TOKEN_SECRET;
 
-    private static Twitter getTwitterInstance() {
+        // populate tokens and keys from properties file
+        loadConfig();
+
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
             .setOAuthConsumerKey(CONSUMER_KEY)
@@ -68,4 +57,16 @@ public class Main {
 
         return twitter;
     }
+
+    // populate keys and tokens from Config.properties
+    private void loadConfig() throws IOException {
+        Properties properties = new Properties();
+        InputStream inputStream = new FileInputStream("Config.properties");
+        properties.load(inputStream);
+        CONSUMER_KEY = properties.getProperty("CONSUMER_KEY");
+        CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
+        ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
+        ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
+    }
+
 }
