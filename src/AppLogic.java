@@ -9,10 +9,6 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class AppLogic {
-    private String CONSUMER_KEY;
-    private String CONSUMER_SECRET_KEY;
-    private String ACCESS_TOKEN;
-    private String ACCESS_TOKEN_SECRET;
     public AppLogic() throws IOException {
         int selection = 0;
 
@@ -43,10 +39,15 @@ public class AppLogic {
     }
 
     private Twitter getTwitterInstance() throws IOException {
-
+        Properties properties = new Properties();
+        InputStream inputStream = new FileInputStream("Config.properties");
+        properties.load(inputStream);
 
         // populate tokens and keys from properties file
-        loadConfig();
+        String CONSUMER_KEY = properties.getProperty("CONSUMER_KEY");
+        String CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
+        String ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
+        String ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
 
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -59,16 +60,5 @@ public class AppLogic {
         Twitter twitter = tf.getInstance();
 
         return twitter;
-    }
-
-    // populate keys and tokens from Config.properties
-    private void loadConfig() throws IOException {
-        Properties properties = new Properties();
-        InputStream inputStream = new FileInputStream("Config.properties");
-        properties.load(inputStream);
-        CONSUMER_KEY = properties.getProperty("CONSUMER_KEY");
-        CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
-        ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
-        ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
     }
 }
