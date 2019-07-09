@@ -8,11 +8,14 @@ This application has the basic functionality of:
 
 ## Running BrigBot.jar:
 
-This application requires a Config.properties file that contains your Twitter tokens and keys. The keys in the properties file must be: 
+This application requires a Config.properties file that contains your Twitter tokens and keys.
+There an example file called (example_Config.properties) that lives in /out/artifacts/BrigBot_jar
+for this file, you may add your key or token after the "=" for example:
 
-CONSUMER_KEY, CONSUMER_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
+CONSUMER_KEY=YourConsumerKey
 
-Get to the root directory of BrigBot.jar, make sure you have created your Config.properties file and that it is in the same directory as BrigBot.jar
+remove "example_" from the file, so that it now reads "Config.properties" and make sure that it is in the same directory
+as BrigBot.jar
 
 To Run, enter:
 java -jar BrigBot.jar
