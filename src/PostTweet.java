@@ -8,6 +8,8 @@ public class PostTweet {
 
         if (status != null) {
             System.out.println("The following message was tweeted:\n");
+
+            // status.getText() is the tweet just posted
             System.out.println(status.getText());
         }
     }
@@ -17,8 +19,6 @@ public class PostTweet {
             Status status = twitter.updateStatus(tweet);
 
             return status;
-
-            // status.getText() is the tweet just posted
         }
         catch (TwitterException e) {
             e.printStackTrace();
