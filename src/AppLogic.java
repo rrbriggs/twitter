@@ -5,6 +5,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -15,18 +16,17 @@ public class AppLogic {
         System.out.println("Welcome to the BrigBot Twitter Interface!");
 
 
+        Scanner sc = new Scanner(System.in);
+        Scanner tweetInput = new Scanner(System.in);
+
         while (selection != 3) {
             System.out.println("Select from the following:\n 1: Write a tweet\n 2: View Timeline\n 3: Exit");
-            Scanner sc = new Scanner(System.in);
             selection = sc.nextInt();
-            sc.close();
 
             switch (selection) {
                 case 1: // Write a Tweet
                     System.out.println("Write a tweet:\n");
-                    Scanner tweetInput = new Scanner(System.in);
                     String tweet = tweetInput.nextLine();
-                    tweetInput.close();
                     PostTweet postTweet = new PostTweet(getTwitterInstance(), tweet);
                     break;
                 case 2: // View Timeline
@@ -38,6 +38,9 @@ public class AppLogic {
                     System.out.println("Input not valid, please try again.");
             }
         }
+
+        sc.close();
+        tweetInput.close();
     }
 
     private Twitter getTwitterInstance() throws IOException {
@@ -51,8 +54,6 @@ public class AppLogic {
         String ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
         String ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
 
-        inputStream.close();
-
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey(CONSUMER_KEY)
@@ -62,6 +63,8 @@ public class AppLogic {
 
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
+
+        inputStream.close();
 
         return twitter;
     }
