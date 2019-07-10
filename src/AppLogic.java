@@ -19,12 +19,14 @@ public class AppLogic {
             System.out.println("Select from the following:\n 1: Write a tweet\n 2: View Timeline\n 3: Exit");
             Scanner sc = new Scanner(System.in);
             selection = sc.nextInt();
+            sc.close();
 
             switch (selection) {
                 case 1: // Write a Tweet
                     System.out.println("Write a tweet:\n");
                     Scanner tweetInput = new Scanner(System.in);
                     String tweet = tweetInput.nextLine();
+                    tweetInput.close();
                     PostTweet postTweet = new PostTweet(getTwitterInstance(), tweet);
                     break;
                 case 2: // View Timeline
@@ -48,6 +50,8 @@ public class AppLogic {
         String CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
         String ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
         String ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
+
+        inputStream.close();
 
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
