@@ -13,10 +13,7 @@ public class AppLogic {
         int selection = 0;
 
         System.out.println("Welcome to the BrigBot Twitter Interface!");
-
-
         Scanner sc = new Scanner(System.in);
-        Scanner tweetInput = new Scanner(System.in);
 
         while (selection != 3) {
             System.out.println("Select from the following:\n 1: Write a tweet\n 2: View Timeline\n 3: Exit");
@@ -25,7 +22,8 @@ public class AppLogic {
             switch (selection) {
                 case 1: // Write a Tweet
                     System.out.println("Write a tweet:\n");
-                    String tweet = tweetInput.nextLine();
+                    sc.nextLine(); //consume \n from nextInt()
+                    String tweet = sc.nextLine();
                     PostTweet postTweet = new PostTweet(getTwitterInstance(), tweet);
                     break;
                 case 2: // View Timeline
@@ -39,7 +37,6 @@ public class AppLogic {
         }
 
         sc.close();
-        tweetInput.close();
     }
 
     private Twitter getTwitterInstance() throws IOException {
