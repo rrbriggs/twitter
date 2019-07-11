@@ -8,7 +8,8 @@ This application has the basic functionality of:
 
 ## Building and Running BrigBot.jar from terminal:
 
-With all of the main .java files (AppLogic, FetchTimeline, Main, PostTweet) in the same directory.
+Ensure you have all of the main .java files (AppLogic, FetchTimeline, Main, PostTweet) in the same directory,
+as well as the twitter4j dependency jar file (twitter4j-core-4.0.7.jar).
 In this directory, ensure you have no .class files other than those specified here.
 
 To compile enter the command:
