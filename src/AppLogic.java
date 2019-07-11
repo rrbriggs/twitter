@@ -27,7 +27,7 @@ public class AppLogic {
 
             switch (selection) {
                 case 1: // Write a Tweet
-                    System.out.println("Write a tweet:\n");
+                    System.out.println("Write a tweet:");
                     String tweet = sc.nextLine();
                     PostTweet postTweet = new PostTweet(getTwitterInstance(), tweet);
                     break;
