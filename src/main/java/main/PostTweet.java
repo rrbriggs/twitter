@@ -10,10 +10,10 @@ public class PostTweet {
             Status status = twitter.updateStatus(tweet);
 
             if (status != null) {
-                System.out.println("The following message was tweeted:\n");
+                System.out.println("The following message was tweeted:");
 
                 // status.getText() is the tweet just posted
-                System.out.println(status.getText());
+                System.out.println(status.getText() + "\n");
             }
         }
         catch (TwitterException e) {

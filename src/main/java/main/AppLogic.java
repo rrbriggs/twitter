@@ -19,12 +19,17 @@ public class AppLogic {
 
         while (selection != 3) {
             System.out.println("Select from the following:\n 1: Write a tweet\n 2: View Timeline\n 3: Exit");
-            selection = sc.nextInt();
+
+            try {
+                selection = Integer.parseInt(sc.nextLine());
+            }
+            catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
 
             switch (selection) {
                 case 1: // Write a Tweet
-                    System.out.println("Write a tweet:\n");
-                    sc.nextLine(); //consume \n from nextInt()
+                    System.out.println("Write a tweet:");
                     String tweet = sc.nextLine();
                     PostTweet postTweet = new PostTweet(getTwitterInstance(), tweet);
                     break;
