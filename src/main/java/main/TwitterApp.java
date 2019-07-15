@@ -16,16 +16,8 @@ public class TwitterApp extends Application<AppConfiguration> {
     @Override
     public void run(final AppConfiguration configuration, final Environment environment)
             throws Exception {
-        // TODO: cleanup some of this
         LOGGER.info("Starting application with name: {}", configuration.getAppName());
         LOGGER.info("Registering REST resources..");
-
-        //environment.jersey().register();
-
-        //final JsonFileRulesRepository rulesRepository = new JsonFileRulesRepository();
-        //final RulesResource rulesResource = new RulesResource(rulesRepository);
-
-        //final TwitterRESTController twitterRESTController = new TwitterRESTController();
 
         environment.jersey().register(new TwitterRESTController());
     }
