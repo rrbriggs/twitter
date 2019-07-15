@@ -5,12 +5,12 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DropWizTest extends Application<AppConfiguration> {
+public class TwitterApp extends Application<AppConfiguration> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DropWizTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
 
     public static void main(final String[] args) throws Exception {
-        new DropWizTest().run(args);
+        new TwitterApp().run(args);
     }
 
     @Override

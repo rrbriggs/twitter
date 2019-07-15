@@ -36,9 +36,7 @@ dependencies {
 
 application {
     // Define the main class for the application
-    // TODO: testing here for dropwizard, clean this up
-    // mainClassName = 'main.Main'
-    mainClassName = 'main.DropWizTest'
+    mainClassName = 'main.TwitterApp'
 }
 
 run {
