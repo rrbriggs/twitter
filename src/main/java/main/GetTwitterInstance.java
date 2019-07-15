@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+// TODO: was trying to do some weird casting stuff her, then switching to just creating a getter/setter in PostTweet, everything is broken atm
+
 public class GetTwitterInstance {
     private Twitter twitter;
     private getTwitterInstance() throws IOException {
