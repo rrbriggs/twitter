@@ -1,3 +1,3 @@
-Main-Class: Main
-Class-Path: twitter4j-core-4.0.7.jar PostTweet AppLogic FetchTimeLine
+Main-Class: main.Main
+Class-Path: twitter4j-core-4.0.7.jar main.PostTweet main.AppLogic main.FetchTimeLine
 

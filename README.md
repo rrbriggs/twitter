@@ -6,7 +6,25 @@ This application has the basic functionality of:
 1: Sending a tweet
 2: Viewing your Timeline
 
-## Building and Running BrigBot.jar from terminal:
+##Building and running with Gradle:
+
+Clone the repo with `git clone --single-branch --branch env/add-gradle https://github.com/rrbriggs/BrigBot.git`
+
+*This application requires a Config.properties file that contains your Twitter tokens and keys.
+There an example file called (example_Config.properties) that lives in the examples folder of this project.
+Once you have populated this file with your information, make sure to rename the file to `Config.properties`.
+Note: for this file, you must add your key or token after the "=" for example:*
+
+`CONSUMER_KEY=YourConsumerKey`
+
+Open the directory in terminal or navigate to it, then to build the app enter:
+
+`./gradlew build`
+
+To run the app, then enter:
+`./gradlew run`
+
+## Building and running BrigBot.jar from terminal:
 
 Ensure you have all of the main .java files (AppLogic, FetchTimeline, Main, PostTweet) in the same directory,
 as well as the twitter4j dependency jar file (twitter4j-core-4.0.7.jar) which can be found in the libs folder.
@@ -40,4 +58,4 @@ To Run, enter:
 
 ## Note:
 
-Requires the Twitter4j library (http://twitter4j.org/en/http://twitter4j.org/en/)
+Requires the [Twitter4j library](http://twitter4j.org/en/http://twitter4j.org/en/)
