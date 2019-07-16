@@ -1,5 +1,6 @@
 package main;
 
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
@@ -12,13 +13,19 @@ public class FetchTimeline {
     public FetchTimeline(Twitter twitter){
         try {
             timeline = twitter.getHomeTimeline().stream()
-                    .map(item -> item.getText())
+                    .map(item -> processTweetNameAndText(item))
                     .collect(Collectors.toList());
             System.out.println(timeline + "\n");
+
         }
         catch (TwitterException e) {
             e.printStackTrace();
         }
+    }
+
+    private String processTweetNameAndText(Status item) {
+        String tweetString = item.getUser().getName() + ": " + item.getText();
+        return tweetString;
     }
 
     public List<String> getTimeline() {
