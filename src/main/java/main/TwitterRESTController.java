@@ -1,23 +1,36 @@
 package main;
 
-import twitter4j.Twitter;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import java.io.IOException;
 
-import javax.ws.rs.*;
-
-@Path("/api/1.0/twitter/tweet")
-//@Produces(MediaType.APPLICATION_JSON)
+@Path("/api/1.0/twitter")
 public class TwitterRESTController {
 
+    @GET
+    @Path("/timeline")
+    public String getTimeline() throws IOException {
+        GetTwitterInstance twitterInstance = new GetTwitterInstance();
+        FetchTimeline fetchTimeline = new FetchTimeline(twitterInstance.getTwitter());
+
+        String tweetString = "";
+        for (String tweet: fetchTimeline.getTimeline()) {
+            tweetString += tweet + "\n";
+        }
+
+        return tweetString;
+    }
+
     @POST
-    @Path("/message")
+    @Path("/tweet/message")
     public String postTweet(String message) {
         System.out.println("message being posted: " + message);
 
         try {
-            GetTwitterInstance getTwitterInstance = new GetTwitterInstance();
-            Twitter twitter = (Twitter) getTwitterInstance;
-            PostTweet postTweet = new PostTweet(twitter, message);
-            return "you posted" + message;
+            GetTwitterInstance twitterInstance = new GetTwitterInstance();
+            PostTweet postTweet = new PostTweet(twitterInstance.getTwitter(), message);
+            return "you posted: " + message;
         }
         catch (Exception e) {
             e.printStackTrace();
