@@ -8,7 +8,7 @@ This application has the basic functionality of:
 
 ##Building and running with Gradle:
 
-Clone the repo with `git clone --single-branch --branch env/add-gradle https://github.com/rrbriggs/BrigBot.git`
+Clone the repo with `git clone --single-branch --branch dropwizard https://github.com/rrbriggs/BrigBot.git`
 
 *This application requires a Config.properties file that contains your Twitter tokens and keys.
 There an example file called (example_Config.properties) that lives in the examples folder of this project.
