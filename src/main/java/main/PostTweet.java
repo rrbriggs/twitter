@@ -5,6 +5,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 public class PostTweet {
+    private TwitterException e = null;
     public PostTweet(Twitter twitter, String tweet) {
         try {
             Status status = twitter.updateStatus(tweet);
@@ -18,6 +19,16 @@ public class PostTweet {
         }
         catch (TwitterException e) {
             e.printStackTrace();
+            this.e = e;
+        }
+    }
+
+    public TwitterException getError() {
+        if (e != null) {
+            return e;
+        }
+        else {
+            return null;
         }
     }
 }
