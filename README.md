@@ -6,7 +6,7 @@ This application has the basic functionality of:
 1: Sending a tweet
 2: Viewing your Timeline
 
-##Building and running with Gradle:
+## Building and running with Gradle:
 
 Clone the repo with `git clone --single-branch --branch dropwizard https://github.com/rrbriggs/BrigBot.git`
 
