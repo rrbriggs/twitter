@@ -13,16 +13,28 @@ public class TwitterRESTController {
 
     @GET
     @Path("/timeline")
-    public String getTimeline() throws IOException {
-        GetTwitterInstance twitterInstance = new GetTwitterInstance();
-        FetchTimeline fetchTimeline = new FetchTimeline(twitterInstance.getTwitter());
+    public Response getTimeline() {
+        try {
+            GetTwitterInstance twitterInstance = new GetTwitterInstance();
+            FetchTimeline fetchTimeline = new FetchTimeline(twitterInstance.getTwitter());
 
-        String tweetString = "";
-        for (String tweet: fetchTimeline.getTimeline()) {
-            tweetString += tweet + "\n";
+            String tweetString = "";
+            for (String tweet: fetchTimeline.getTimeline()) {
+                tweetString += tweet + "\n";
+            }
+
+            return Response
+                    .status(Response.Status.OK)
+                    .entity(tweetString)
+                    .build();
         }
-
-        return tweetString;
+        catch (IOException e) {
+            e.printStackTrace();
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("There was an error getting your timeline. Please try again in a few minutes.")
+                    .build();
+        }
     }
 
     @POST
