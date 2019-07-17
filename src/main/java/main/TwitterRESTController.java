@@ -53,7 +53,7 @@ public class TwitterRESTController {
                 GetTwitterInstance twitterInstance = new GetTwitterInstance();
                 Status status = twitterInstance.getTwitter().updateStatus(message);
 
-                LOGGER.info("Tweeting: {}", status);
+                LOGGER.info("Tweeting: {}", status.getText());
                     return Response
                             .status(Response.Status.CREATED)
                             .entity(message)
