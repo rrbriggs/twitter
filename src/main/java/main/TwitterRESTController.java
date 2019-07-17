@@ -12,15 +12,22 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
 public class TwitterRESTController {
     private final int TWEET_LENGTH = 280;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
+
     @GET
     @Path("/timeline")
     public Response getTimeline() {
         try {
+            LOGGER.info("Getting Timeline.. ");
+
             GetTwitterInstance twitterInstance = new GetTwitterInstance();
 
             return Response
@@ -40,18 +47,19 @@ public class TwitterRESTController {
     @POST
     @Path("/tweet/message")
     public Response postTweet(String message) {
-        System.out.println("message being posted: " + message);
 
         if (message.length() <= TWEET_LENGTH) {
             try {
                 GetTwitterInstance twitterInstance = new GetTwitterInstance();
                 Status status = twitterInstance.getTwitter().updateStatus(message);
+
+                LOGGER.info("Tweeting: {}", status);
                     return Response
                             .status(Response.Status.CREATED)
                             .entity(message)
                             .build();
             }
-            catch (Exception e) {
+            catch (IOException | TwitterException e) {
                 e.printStackTrace();
 
                 return Response
