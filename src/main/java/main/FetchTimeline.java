@@ -15,7 +15,8 @@ public class FetchTimeline {
             timeline = twitter.getHomeTimeline().stream()
                     .map(item -> processTweetNameAndText(item))
                     .collect(Collectors.toList());
-            System.out.println(timeline + "\n");
+//            System.out.println(timeline + "\n");
+            System.out.println(twitter.getHomeTimeline());
 
         }
         catch (TwitterException e) {

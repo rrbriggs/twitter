@@ -17,15 +17,11 @@ public class TwitterRESTController {
         try {
             GetTwitterInstance twitterInstance = new GetTwitterInstance();
             FetchTimeline fetchTimeline = new FetchTimeline(twitterInstance.getTwitter());
-
-            String tweetString = "";
-            for (String tweet: fetchTimeline.getTimeline()) {
-                tweetString += tweet + "\n";
-            }
+            System.out.println(fetchTimeline);
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(tweetString)
+                    .entity("test") //fetchTimeline.getTimeline()
                     .build();
         }
         catch (IOException e) {
