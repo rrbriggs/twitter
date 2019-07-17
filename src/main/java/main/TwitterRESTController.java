@@ -1,13 +1,19 @@
 package main;
 
 
+import twitter4j.Status;
+import twitter4j.TwitterException;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 @Path("/api/1.0/twitter")
+@Produces(MediaType.APPLICATION_JSON)
 public class TwitterRESTController {
     private final int TWEET_LENGTH = 280;
 
@@ -16,15 +22,13 @@ public class TwitterRESTController {
     public Response getTimeline() {
         try {
             GetTwitterInstance twitterInstance = new GetTwitterInstance();
-            FetchTimeline fetchTimeline = new FetchTimeline(twitterInstance.getTwitter());
-            System.out.println(fetchTimeline);
 
             return Response
                     .status(Response.Status.OK)
-                    .entity("test") //fetchTimeline.getTimeline()
+                    .entity(twitterInstance.getTwitter().getHomeTimeline()) //fetchTimeline.getTimeline()
                     .build();
         }
-        catch (IOException e) {
+        catch (IOException | TwitterException e) {
             e.printStackTrace();
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -41,23 +45,19 @@ public class TwitterRESTController {
         if (message.length() <= TWEET_LENGTH) {
             try {
                 GetTwitterInstance twitterInstance = new GetTwitterInstance();
-                PostTweet postTweet = new PostTweet(twitterInstance.getTwitter(), message);
-                if (postTweet.getError() == null) {
+                Status status = twitterInstance.getTwitter().updateStatus(message);
                     return Response
-                            .status(Response.Status.OK)
+                            .status(Response.Status.CREATED)
                             .entity(message)
                             .build();
-                }
-                else {
-                    return Response
-                            .status(Response.Status.INTERNAL_SERVER_ERROR)
-                            .entity(postTweet.getError().getErrorMessage())
-                            .build();
-                }
             }
             catch (Exception e) {
                 e.printStackTrace();
-                return null;
+
+                return Response
+                        .status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity(e)
+                        .build();
             }
         }
         else {
