@@ -14,8 +14,7 @@ public class TwitterApp extends Application<AppConfiguration> {
     }
 
     @Override
-    public void run(final AppConfiguration configuration, final Environment environment)
-            throws Exception {
+    public void run(final AppConfiguration configuration, final Environment environment) {
         LOGGER.info("Starting application with name: {}", configuration.getAppName());
         LOGGER.info("Registering REST resources..");
 
