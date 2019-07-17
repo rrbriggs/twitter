@@ -64,7 +64,7 @@ public class TwitterRESTController {
 
                 return Response
                         .status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(e)
+                        .entity(e.getMessage())
                         .build();
             }
         }
