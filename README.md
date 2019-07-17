@@ -24,6 +24,15 @@ Open the directory in terminal or navigate to it, then to build the app enter:
 To run the app, then enter:
 `./gradlew run`
 
+### To send a Tweet:
+POST plain text / string to the endpoint /api/1.0/twitter/tweet/message
+For example, from terminal: `curl -d "Hello World" -X POST http://localhost:8080/api/1.0/twitter/tweet/message`
+
+### To get your Timeline:
+GET from the endpoint /api/1.0/twitter/timeline
+For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timeline;`
+
+
 ## Building and running BrigBot.jar from terminal:
 
 Ensure you have all of the main .java files (AppLogic, FetchTimeline, Main, PostTweet) in the same directory,
