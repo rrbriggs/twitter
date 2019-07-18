@@ -54,10 +54,10 @@ public class TwitterRESTController {
                 Status status = twitterInstance.getTwitter().updateStatus(message);
 
                 LOGGER.info("Tweeting: {}", status.getText());
-                    return Response
-                            .status(Response.Status.CREATED)
-                            .entity(message)
-                            .build();
+                return Response
+                        .status(Response.Status.CREATED)
+                        .entity(message)
+                        .build();
             }
             catch (IOException | TwitterException e) {
                 e.printStackTrace();
