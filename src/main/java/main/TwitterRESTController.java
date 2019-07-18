@@ -56,7 +56,7 @@ public class TwitterRESTController {
                 LOGGER.info("Tweeting: {}", status.getText());
                 return Response
                         .status(Response.Status.CREATED)
-                        .entity(status.getId())
+                        .entity(status)
                         .build();
             }
             catch (IOException | TwitterException e) {
