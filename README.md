@@ -26,7 +26,7 @@ To run the app, then enter:
 
 ### To send a Tweet:
 POST plain text / string to the endpoint /api/1.0/twitter/tweet/message
-For example, from terminal: `curl -d "Hello World" -X POST http://localhost:8080/api/1.0/twitter/tweet/message`
+For example, from terminal: `curl -d "message=Hello World" -X POST http://localhost:8080/api/1.0/twitter/tweet`
 
 ### To get your Timeline:
 GET from the endpoint /api/1.0/twitter/timeline
