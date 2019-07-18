@@ -32,7 +32,7 @@ public class TwitterRESTController {
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitterInstance.getTwitter().getHomeTimeline()) //fetchTimeline.getTimeline()
+                    .entity(twitterInstance.getTwitter().getHomeTimeline())
                     .build();
         }
         catch (IOException | TwitterException e) {
