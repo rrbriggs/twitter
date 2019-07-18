@@ -1,6 +1,7 @@
 package main;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
@@ -8,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -45,8 +47,9 @@ public class TwitterRESTController {
     }
 
     @POST
-    @Path("/tweet/message")
-    public Response postTweet(String message) {
+    @Path("/tweet")
+    public Response postTweet(@FormParam("message") @NotEmpty String message,
+                              @FormParam("optionalMessage") String optionalMessage) {
 
         if (message.length() <= TWEET_LENGTH) {
             try {
@@ -54,6 +57,7 @@ public class TwitterRESTController {
                 Status status = twitterInstance.getTwitter().updateStatus(message);
 
                 LOGGER.info("Tweeting: {}", status.getText());
+
                 return Response
                         .status(Response.Status.CREATED)
                         .entity(status)
