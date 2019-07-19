@@ -34,8 +34,8 @@ dependencies {
 }
 
 application {
-    // Define the main class for the application
-    mainClassName = 'main.TwitterApp'
+    // Define the twitter_bootcamp class for the application
+    mainClassName = 'twitter_bootcamp.TwitterApp'
 }
 
 run {

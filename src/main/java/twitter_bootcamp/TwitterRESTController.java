@@ -1,4 +1,4 @@
-package main;
+package twitter_bootcamp;
 
 
 import org.hibernate.validator.constraints.NotEmpty;

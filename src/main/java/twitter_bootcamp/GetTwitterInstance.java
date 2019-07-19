@@ -1,4 +1,4 @@
-package main;
+package twitter_bootcamp;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;

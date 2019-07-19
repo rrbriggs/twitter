@@ -1,4 +1,4 @@
-package main;
+package twitter_bootcamp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;

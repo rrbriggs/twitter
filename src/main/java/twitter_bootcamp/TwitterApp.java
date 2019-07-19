@@ -1,4 +1,4 @@
-package main;
+package twitter_bootcamp;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;

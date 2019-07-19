@@ -35,7 +35,7 @@ For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timelin
 
 ## Building and running BrigBot.jar from terminal:
 
-Ensure you have all of the main .java files (AppLogic, FetchTimeline, Main, PostTweet) in the same directory,
+Ensure you have all of the twitter_bootcamp .java files (AppLogic, FetchTimeline, Main, PostTweet) in the same directory,
 as well as the twitter4j dependency jar file (twitter4j-core-4.0.7.jar) which can be found in the libs folder.
 In this directory, ensure you have no .class files other than those specified here.
 
