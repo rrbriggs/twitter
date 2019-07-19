@@ -39,7 +39,6 @@ application {
 }
 
 run {
-    standardInput = System.in
     args 'server', configPath + 'app_config.yml'
 }
 
