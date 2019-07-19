@@ -40,6 +40,7 @@ BrigBot.ipr
 BrigBot.iws
 BrigBot.twitter_bootcamp.iml
 BrigBot.test.iml
+BrigBot.main.iml
 out/
 src/.DS_Store
 src/twitter_bootcamp/.DS_Store
