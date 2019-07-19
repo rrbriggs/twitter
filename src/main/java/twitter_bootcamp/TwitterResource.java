@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
-public class TwitterRESTController {
+public class TwitterResource {
     private final int TWEET_LENGTH = 280;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);

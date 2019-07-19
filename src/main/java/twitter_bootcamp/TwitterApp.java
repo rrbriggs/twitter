@@ -18,6 +18,6 @@ public class TwitterApp extends Application<AppConfiguration> {
         LOGGER.info("Starting application with name: {}", configuration.getAppName());
         LOGGER.info("Registering REST resources..");
 
-        environment.jersey().register(new TwitterRESTController());
+        environment.jersey().register(new TwitterResource());
     }
 }
