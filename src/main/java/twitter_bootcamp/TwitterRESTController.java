@@ -48,8 +48,7 @@ public class TwitterRESTController {
 
     @POST
     @Path("/tweet")
-    public Response postTweet(@FormParam("message") @NotEmpty String message,
-                              @FormParam("optionalMessage") String optionalMessage) {
+    public Response postTweet(@FormParam("message") @NotEmpty String message) {
 
         if (message.length() <= TWEET_LENGTH) {
             try {
