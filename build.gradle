@@ -14,6 +14,12 @@ plugins {
     id 'application'
 }
 
+project.ext {
+    configPath = "$rootProject.projectDir/config/"
+    
+    dropwizardVersion = '1.3.12'
+}
+
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
@@ -22,15 +28,18 @@ repositories {
 
 dependencies {
     // Use Twitter4J 
-    implementation 'org.twitter4j:twitter4j-core:4.0.7' 
+    implementation 'org.twitter4j:twitter4j-core:4.0.7'
+    compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
 
 }
 
 application {
-    // Define the main class for the application
-    mainClassName = 'main.Main'
+    // Define the twitter_bootcamp class for the application
+    mainClassName = 'twitter_bootcamp.TwitterApp'
 }
 
 run {
-    standardInput = System.in
+    args 'server', configPath + 'app_config.yml'
 }
+
+sourceCompatibility = 1.8

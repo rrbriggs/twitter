@@ -34,5 +34,18 @@ Config.properties
 .idea/
 .iml
 
+.DS_Store
+BrigBot.iml
+BrigBot.ipr
+BrigBot.iws
+BrigBot.twitter_bootcamp.iml
+BrigBot.test.iml
+BrigBot.main.iml
+out/
+src/.DS_Store
+src/twitter_bootcamp/.DS_Store
+src/twitter_bootcamp/java/.DS_Store
+src/twitter_bootcamp/java/twitter_bootcamp/.DS_Store
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
