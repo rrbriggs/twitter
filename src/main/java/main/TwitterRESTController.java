@@ -68,7 +68,8 @@ public class TwitterRESTController {
 
                 return Response
                         .status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(e.getMessage())
+                        .entity("The problem here is with us, not you. If the problem persists, " +
+                                "submit an issue (https://github.com/rrbriggs/BrigBot/issues)")
                         .build();
             }
         }
