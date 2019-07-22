@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.TwitterResponse;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,11 +31,11 @@ public class TwitterResource {
         try {
             LOGGER.info("Getting Timeline.. ");
 
-            GetTwitterInstance twitterInstance = new GetTwitterInstance();
+            TwitterResponse timeline = getTwitterResponse();
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitterInstance.getTwitterTimeline())
+                    .entity(timeline)
                     .build();
         }
         catch (IOException | TwitterException e) {
@@ -44,6 +45,12 @@ public class TwitterResource {
                     .entity("There was an error getting your timeline. Please try again in a few minutes.")
                     .build();
         }
+    }
+
+    private TwitterResponse getTwitterResponse() throws IOException, TwitterException {
+        GetTwitterInstance getTwitterInstance = new GetTwitterInstance();
+        TwitterResponse twitterResponse = getTwitterInstance.getTwitterTimeline();
+        return twitterResponse;
     }
 
     @POST
