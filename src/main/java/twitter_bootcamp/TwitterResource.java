@@ -34,7 +34,7 @@ public class TwitterResource {
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitterInstance.getTwitter().getHomeTimeline())
+                    .entity(twitterInstance.getTwitterTimeline())
                     .build();
         }
         catch (IOException | TwitterException e) {
