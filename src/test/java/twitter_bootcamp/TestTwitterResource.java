@@ -27,9 +27,6 @@ public class TestTwitterResource {
 
     TwitterResource twitterResource;
 
-    @InjectMocks
-    GetTwitterInstance twitterInstance;
-
     @Mock
     Twitter mockTwitter;
 
@@ -58,38 +55,4 @@ public class TestTwitterResource {
         // response.getHomeTimeline();
         assertNotNull(response.getEntity());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    TODO: clean up (keeping around for reference atm)
-//    @ClassRule
-//    public static final ResourceTestRule resources = ResourceTestRule.builder()
-//            .addResource(new TwitterResource())
-//            .build();
-//
-//    @Test
-//    public void testResource() {
-//        assertThat(resources.target("/api/1.0/twitter")
-//                .request()
-//                .get()
-//                .isEqualTo());
-//
-//    }
 }
