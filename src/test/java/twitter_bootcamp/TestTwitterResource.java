@@ -10,9 +10,7 @@ import twitter4j.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.Date;
 
 
@@ -261,7 +259,7 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void testPostTweetStatus() throws IOException, TwitterException {
+    final void testPostTweetStatus() {
         String message = "Testing testPostTweet";
         Response response = twitterResource.postTweet(message);
         System.out.println();
