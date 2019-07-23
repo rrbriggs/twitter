@@ -23,8 +23,9 @@ public class TestTwitterResource {
     ResponseList twitterList;
 
     @BeforeEach
-    void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+    void setUp() {
+
+        // return mocked twitterList when getTwitterResponse() is called
         twitterResource = new TwitterResource(){
             @Override
             public TwitterResponse getTwitterResponse() {
@@ -34,16 +35,17 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void testGetTwitterTimelineStatus() {
+    final void testGetTwitterTimeline() {
         Response response = twitterResource.getTimeline();
 
-        assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+        assertNotNull(response);
     }
 
     @Test
-    final void testGetTwitterTimeline() {
+    final void testGetTwitterTimelineStatus() {
         Response response = twitterResource.getTimeline();
-        System.out.println(response);
-        assertNotNull(response.getEntity());
+
+        // on successful attempt, check for proper status code
+        assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
     }
 }
