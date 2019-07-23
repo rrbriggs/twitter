@@ -59,8 +59,7 @@ public class TwitterResource {
 
         if (message.length() <= TWEET_LENGTH) {
             try {
-                GetTwitterInstance twitterInstance = new GetTwitterInstance();
-                Status status = twitterInstance.getTwitter().updateStatus(message);
+                Status status = sendTweet(message);
 
                 LOGGER.info("Tweeting: {}", status.getText());
 
@@ -85,5 +84,11 @@ public class TwitterResource {
                     .entity("Tweet was too long. Limit tweet to " + TWEET_LENGTH + " characters.")
                     .build();
         }
+    }
+
+    public Status sendTweet(String message) throws IOException, TwitterException {
+        GetTwitterInstance twitterInstance = new GetTwitterInstance();
+        Status status = twitterInstance.getTwitter().updateStatus(message);
+        return status;
     }
 }

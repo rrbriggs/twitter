@@ -4,8 +4,8 @@ package twitter_bootcamp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import twitter4j.ResponseList;
+import twitter4j.Status;
 import twitter4j.TwitterResponse;
 
 import static org.junit.Assert.assertNotNull;
@@ -47,5 +47,16 @@ public class TestTwitterResource {
 
         // on successful attempt, check for proper status code
         assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    final void testPostTweet() {
+        String message = "Testing testPostTweet";
+        Response response = twitterResource.postTweet(message);
+    }
+
+    @Test
+    final void testPostTweetStatus() {
+
     }
 }
