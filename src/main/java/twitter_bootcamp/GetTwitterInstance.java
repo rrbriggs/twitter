@@ -43,8 +43,4 @@ public class GetTwitterInstance {
     public Twitter getTwitter() {
         return twitter;
     }
-
-    public TwitterResponse getTwitterTimeline() throws TwitterException {
-        return twitter.getHomeTimeline();
-    }
 }

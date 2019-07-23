@@ -3,6 +3,7 @@ package twitter_bootcamp;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import twitter4j.Status;
+import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 import javax.ws.rs.GET;
@@ -31,11 +32,11 @@ public class TwitterResource {
         try {
             LOGGER.info("Getting Timeline.. ");
 
-            TwitterResponse timeline = getTwitterResponse();
+            Twitter twitterInstance = getTwitterResponse();
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(timeline)
+                    .entity(twitterInstance.getHomeTimeline())
                     .build();
         }
         catch (IOException | TwitterException e) {
@@ -47,10 +48,10 @@ public class TwitterResource {
         }
     }
 
-    public TwitterResponse getTwitterResponse() throws IOException, TwitterException {
+    public Twitter getTwitterResponse() throws IOException {
         GetTwitterInstance getTwitterInstance = new GetTwitterInstance();
-        TwitterResponse twitterResponse = getTwitterInstance.getTwitterTimeline();
-        return twitterResponse;
+        Twitter twitterInstance = getTwitterInstance.getTwitter();
+        return twitterInstance;
     }
 
     @POST
