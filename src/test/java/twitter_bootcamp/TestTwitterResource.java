@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import twitter4j.ResponseList;
-import twitter4j.TwitterResponse;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import twitter4j.*;
 
 import javax.ws.rs.core.Response;
 
@@ -34,7 +33,7 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void testGetTwitterTimelineStatus() {
+    final void testGetTwitterTimelineStatus() throws TwitterException {
         Response response = twitterResource.getTimeline();
 
         assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
