@@ -47,7 +47,7 @@ public class TwitterResource {
         }
     }
 
-    private TwitterResponse getTwitterResponse() throws IOException, TwitterException {
+    public TwitterResponse getTwitterResponse() throws IOException, TwitterException {
         GetTwitterInstance getTwitterInstance = new GetTwitterInstance();
         TwitterResponse twitterResponse = getTwitterInstance.getTwitterTimeline();
         return twitterResponse;

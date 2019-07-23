@@ -11,10 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
+import twitter4j.*;
 
 import javax.ws.rs.core.Response;
 import java.util.LinkedList;
@@ -23,17 +20,19 @@ import java.util.List;
 
 public class TestTwitterResource {
 
-    ResponseList twitterList;
-
     TwitterResource twitterResource;
 
-    @Mock
-    Twitter mockTwitter;
+    @Mock ResponseList twitterList;
 
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        twitterResource = new TwitterResource();
+        twitterResource = new TwitterResource(){
+            @Override
+            public TwitterResponse getTwitterResponse() {
+                return twitterList;
+            }
+        };
     }
 
     // TODO: This currently isn't mocking the timeline
@@ -51,6 +50,7 @@ public class TestTwitterResource {
     final void testGetTwitterTimeline() {
         // when(twitterInstance.getTwitter().getHomeTimeline()).thenReturn(twitterList);
         Response response = twitterResource.getTimeline();
+        System.out.println(response.getEntity());
         // when(response.getHomeTimeline()).thenReturn(twitterList);
         // response.getHomeTimeline();
         assertNotNull(response.getEntity());
