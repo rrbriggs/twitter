@@ -3,6 +3,7 @@ package twitter_bootcamp;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import twitter4j.Status;
+import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 import javax.ws.rs.GET;
@@ -25,20 +26,25 @@ public class TwitterResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
 
+    private GetTwitterInstance getTwitterInstance = new GetTwitterInstance();
+
+    public TwitterResource() throws IOException {
+    }
+
     @GET
     @Path("/timeline")
     public Response getTimeline() {
         try {
             LOGGER.info("Getting Timeline.. ");
 
-            TwitterResponse timeline = getTwitterResponse();
+            TwitterResponse timeline = getTwitterInstance.getTwitterTimeline();
 
             return Response
                     .status(Response.Status.OK)
                     .entity(timeline)
                     .build();
         }
-        catch (IOException | TwitterException e) {
+        catch (TwitterException e) {
             e.printStackTrace();
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -47,20 +53,14 @@ public class TwitterResource {
         }
     }
 
-    public TwitterResponse getTwitterResponse() throws IOException, TwitterException {
-        GetTwitterInstance getTwitterInstance = new GetTwitterInstance();
-        TwitterResponse twitterResponse = getTwitterInstance.getTwitterTimeline();
-        return twitterResponse;
-    }
-
     @POST
     @Path("/tweet")
     public Response postTweet(@FormParam("message") @NotEmpty String message) {
 
         if (message.length() <= TWEET_LENGTH) {
             try {
-                GetTwitterInstance twitterInstance = new GetTwitterInstance();
-                Status status = twitterInstance.getTwitter().updateStatus(message);
+                Twitter twitterInstance = getTwitterInstance.getTwitter();
+                Status status = twitterInstance.updateStatus(message);
 
                 LOGGER.info("Tweeting: {}", status.getText());
 
@@ -69,7 +69,7 @@ public class TwitterResource {
                         .entity(status)
                         .build();
             }
-            catch (IOException | TwitterException e) {
+            catch (TwitterException e) {
                 e.printStackTrace();
 
                 return Response
