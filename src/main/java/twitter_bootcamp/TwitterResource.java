@@ -13,11 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.TwitterResponse;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
