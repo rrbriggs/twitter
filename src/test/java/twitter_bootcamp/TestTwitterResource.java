@@ -7,262 +7,86 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import twitter4j.*;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.ws.rs.core.Response;
-import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 
 
 public class TestTwitterResource {
 
-    String message = "Testing testPostTweet";
-
     TwitterResource twitterResource;
 
     @Mock
-    ResponseList twitterList;
+    Twitter twitter;
 
     @Mock
-    Status status;
+    Status mockStatus;
+
+    @Mock ResponseList<Status> mockTwitterResponseList;
+
+    @Mock
+    TwitterException mockTwitterException;
 
     @BeforeEach
     void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
-        // mocked status
-        status = new Status() {
-            @Override
-            public Date getCreatedAt() {
-                return null;
-            }
+        twitterResource = new TwitterResource(twitter);
 
-            @Override
-            public long getId() {
-                return 0;
-            }
-
-            @Override
-            public String getText() {
-                return message;
-            }
-
-            @Override
-            public int getDisplayTextRangeStart() {
-                return 0;
-            }
-
-            @Override
-            public int getDisplayTextRangeEnd() {
-                return 0;
-            }
-
-            @Override
-            public String getSource() {
-                return null;
-            }
-
-            @Override
-            public boolean isTruncated() {
-                return false;
-            }
-
-            @Override
-            public long getInReplyToStatusId() {
-                return 0;
-            }
-
-            @Override
-            public long getInReplyToUserId() {
-                return 0;
-            }
-
-            @Override
-            public String getInReplyToScreenName() {
-                return null;
-            }
-
-            @Override
-            public GeoLocation getGeoLocation() {
-                return null;
-            }
-
-            @Override
-            public Place getPlace() {
-                return null;
-            }
-
-            @Override
-            public boolean isFavorited() {
-                return false;
-            }
-
-            @Override
-            public boolean isRetweeted() {
-                return false;
-            }
-
-            @Override
-            public int getFavoriteCount() {
-                return 0;
-            }
-
-            @Override
-            public User getUser() {
-                return null;
-            }
-
-            @Override
-            public boolean isRetweet() {
-                return false;
-            }
-
-            @Override
-            public Status getRetweetedStatus() {
-                return null;
-            }
-
-            @Override
-            public long[] getContributors() {
-                return new long[0];
-            }
-
-            @Override
-            public int getRetweetCount() {
-                return 0;
-            }
-
-            @Override
-            public boolean isRetweetedByMe() {
-                return false;
-            }
-
-            @Override
-            public long getCurrentUserRetweetId() {
-                return 0;
-            }
-
-            @Override
-            public boolean isPossiblySensitive() {
-                return false;
-            }
-
-            @Override
-            public String getLang() {
-                return null;
-            }
-
-            @Override
-            public Scopes getScopes() {
-                return null;
-            }
-
-            @Override
-            public String[] getWithheldInCountries() {
-                return new String[0];
-            }
-
-            @Override
-            public long getQuotedStatusId() {
-                return 0;
-            }
-
-            @Override
-            public Status getQuotedStatus() {
-                return null;
-            }
-
-            @Override
-            public URLEntity getQuotedStatusPermalink() {
-                return null;
-            }
-
-            @Override
-            public int compareTo(Status o) {
-                return 0;
-            }
-
-            @Override
-            public UserMentionEntity[] getUserMentionEntities() {
-                return new UserMentionEntity[0];
-            }
-
-            @Override
-            public URLEntity[] getURLEntities() {
-                return new URLEntity[0];
-            }
-
-            @Override
-            public HashtagEntity[] getHashtagEntities() {
-                return new HashtagEntity[0];
-            }
-
-            @Override
-            public MediaEntity[] getMediaEntities() {
-                return new MediaEntity[0];
-            }
-
-            @Override
-            public SymbolEntity[] getSymbolEntities() {
-                return new SymbolEntity[0];
-            }
-
-            @Override
-            public RateLimitStatus getRateLimitStatus() {
-                return null;
-            }
-
-            @Override
-            public int getAccessLevel() {
-                return 0;
-            }
-        };
-
-        // return mocked twitterList when getTwitterResponse() is called
-        twitterResource = new TwitterResource(){
-            @Override
-            public TwitterResponse getTwitterResponse() {
-
-                return twitterList;
-            }
-
-            @Override
-            public Status sendTweet(String message) {
-
-                return status;
-            }
-        };
+        mockTwitterResponseList.add(mockStatus);
     }
 
     @Test
-    final void testGetTwitterTimeline() {
+    final void testGetTwitterTimeline() throws TwitterException {
+        when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
         Response response = twitterResource.getTimeline();
 
-        assertNotNull(response.getEntity());
+        assertEquals(mockTwitterResponseList, response.getEntity());
     }
 
     @Test
-    final void testGetTwitterTimelineStatus() {
+    final void testGetTwitterTimelineStatus() throws TwitterException {
+        when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
+
         Response response = twitterResource.getTimeline();
 
         // on successful attempt, check for proper status code
-        assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test
-    final void testPostTweet() {
+    final void getTimelineTwitterExceptionThrown_thenAssertionSucceeds() throws TwitterException {
+
+        when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
+
+        Response response = twitterResource.getTimeline();
+
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    final void testPostTweet() throws TwitterException {
         String message = "Testing testPostTweet";
+
+        when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
+
         Response response = twitterResource.postTweet(message);
 
-        assertNotNull(response.getEntity());
+        assertEquals(mockStatus, response.getEntity());
     }
 
     @Test
-    final void testPostTweetStatus() {
+    final void testPostTweetStatus() throws TwitterException {
         String message = "Testing testPostTweet";
+
+        when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
+
         Response response = twitterResource.postTweet(message);
         System.out.println();
-        assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
+        assertEquals(Response.Status.CREATED.getStatusCode() ,response.getStatus());
     }
 }
