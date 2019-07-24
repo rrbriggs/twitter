@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import twitter4j.*;
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 import javax.ws.rs.core.Response;
 
@@ -25,7 +28,8 @@ public class TestTwitterResource {
     @Mock
     Status mockStatus;
 
-    @Mock ResponseList<Status> mockTwitterResponseList;
+    @Mock
+    ResponseList<Status> mockTwitterResponseList;
 
     @Mock
     TwitterException mockTwitterException;
