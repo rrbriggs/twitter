@@ -91,12 +91,25 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void testPostTweetStatusExceptionThrown() throws TwitterException {
+    final void testPostTweetExceptionThrown() throws TwitterException {
         String message = "Testing testPostTweet";
 
         when(twitter.updateStatus(anyString())).thenThrow(mockTwitterException);
 
         Response response = twitterResource.postTweet(message);
+
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    final void testPostTweetCharLength() throws TwitterException {
+        //build string of max tweet length + 1
+        char[] charArray = new char[281];
+        String maxLenString = new String(charArray);
+
+        when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
+
+        Response response = twitterResource.postTweet(maxLenString);
 
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
