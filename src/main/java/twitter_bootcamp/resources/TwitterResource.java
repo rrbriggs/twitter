@@ -1,4 +1,4 @@
-package twitter_bootcamp;
+package twitter_bootcamp.resources;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter_bootcamp.TwitterApp;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
