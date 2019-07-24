@@ -22,9 +22,16 @@ import twitter4j.TwitterResponse;
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
 public class TwitterResource {
+
     private final int TWEET_LENGTH = 280;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
+
+    private Twitter twitter;
+
+    public TwitterResource(Twitter twitter) {
+        this.twitter = twitter;
+    }
 
     @GET
     @Path("/timeline")
