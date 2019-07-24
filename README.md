@@ -32,6 +32,10 @@ For example, from terminal: `curl -d "message=Hello World" -X POST http://localh
 GET from the endpoint /api/1.0/twitter/timeline
 For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timeline;`
 
+## Running unit tests:
+In terminal, at the project root directory run:
+`gradle clean test`
+
 
 
 ## Note:
