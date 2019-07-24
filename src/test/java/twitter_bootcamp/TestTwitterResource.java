@@ -49,16 +49,9 @@ public class TestTwitterResource {
         when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
         Response response = twitterResource.getTimeline();
 
+        // test response data is what is expected
         assertEquals(mockTwitterResponseList, response.getEntity());
-    }
-
-    @Test
-    final void testGetTwitterTimelineStatusOK() throws TwitterException {
-        when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
-
-        Response response = twitterResource.getTimeline();
-
-        // on successful attempt, check for proper status code
+        // test status code is what is expected
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
@@ -80,17 +73,9 @@ public class TestTwitterResource {
 
         Response response = twitterResource.postTweet(message);
 
+        // test response data is what is expected
         assertEquals(mockStatus, response.getEntity());
-    }
-
-    @Test
-    final void testPostTweetStatusReturnsCreatedCode() throws TwitterException {
-        String message = "Testing testPostTweet";
-
-        when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
-
-        Response response = twitterResource.postTweet(message);
-
+        // test status code is what is expected
         assertEquals(Response.Status.CREATED.getStatusCode() ,response.getStatus());
     }
 
