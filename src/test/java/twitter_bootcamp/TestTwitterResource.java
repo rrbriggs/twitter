@@ -93,7 +93,7 @@ public class TestTwitterResource {
     @Test
     final void testPostTweetCharLength() throws TwitterException {
         //build string of max tweet length + 1
-        char[] charArray = new char[281];
+        char[] charArray = new char[twitterResource.getTweetLength() + 1];
         String maxLenString = new String(charArray);
 
         when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
