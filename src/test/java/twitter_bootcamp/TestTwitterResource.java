@@ -49,7 +49,7 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void testGetTwitterTimelineStatus() throws TwitterException {
+    final void testGetTwitterTimelineStatusOK() throws TwitterException {
         when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
 
         Response response = twitterResource.getTimeline();
@@ -59,7 +59,7 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void getTimelineTwitterExceptionThrown_thenAssertionSucceeds() throws TwitterException {
+    final void getTimelineTwitterExceptionThrown() throws TwitterException {
 
         when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
 
@@ -69,7 +69,7 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void testPostTweet() throws TwitterException {
+    final void testPostTweetResponseMatchesStatus() throws TwitterException {
         String message = "Testing testPostTweet";
 
         when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
@@ -80,13 +80,24 @@ public class TestTwitterResource {
     }
 
     @Test
-    final void testPostTweetStatus() throws TwitterException {
+    final void testPostTweetStatusReturnsCreatedCode() throws TwitterException {
         String message = "Testing testPostTweet";
 
         when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
 
         Response response = twitterResource.postTweet(message);
-        System.out.println();
+
         assertEquals(Response.Status.CREATED.getStatusCode() ,response.getStatus());
+    }
+
+    @Test
+    final void testPostTweetStatusExceptionThrown() throws TwitterException {
+        String message = "Testing testPostTweet";
+
+        when(twitter.updateStatus(anyString())).thenThrow(mockTwitterException);
+
+        Response response = twitterResource.postTweet(message);
+
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 }
