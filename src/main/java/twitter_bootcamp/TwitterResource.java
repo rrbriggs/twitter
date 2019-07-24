@@ -83,4 +83,8 @@ public class TwitterResource {
                     .build();
         }
     }
+
+    public int getTweetLength() {
+        return TWEET_LENGTH;
+    }
 }
