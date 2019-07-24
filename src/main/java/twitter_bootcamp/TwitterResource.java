@@ -39,14 +39,12 @@ public class TwitterResource {
         try {
             LOGGER.info("Getting Timeline.. ");
 
-            Twitter twitterInstance = getTwitterResponse();
-
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitterInstance.getHomeTimeline())
+                    .entity(twitter.getHomeTimeline())
                     .build();
         }
-        catch (IOException | TwitterException e) {
+        catch (TwitterException e) {
             e.printStackTrace();
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -55,19 +53,13 @@ public class TwitterResource {
         }
     }
 
-    public Twitter getTwitterResponse() throws IOException {
-        GetTwitterInstance getTwitterInstance = new GetTwitterInstance();
-        Twitter twitterInstance = getTwitterInstance.getTwitter();
-        return twitterInstance;
-    }
-
     @POST
     @Path("/tweet")
     public Response postTweet(@FormParam("message") @NotEmpty String message) {
 
         if (message.length() <= TWEET_LENGTH) {
             try {
-                Status status = sendTweet(message);
+                Status status = twitter.updateStatus(message);
 
                 LOGGER.info("Tweeting: {}", status.getText());
 
@@ -76,7 +68,7 @@ public class TwitterResource {
                         .entity(status)
                         .build();
             }
-            catch (IOException | TwitterException e) {
+            catch (TwitterException e) {
                 e.printStackTrace();
 
                 return Response
@@ -92,11 +84,5 @@ public class TwitterResource {
                     .entity("Tweet was too long. Limit tweet to " + TWEET_LENGTH + " characters.")
                     .build();
         }
-    }
-
-    public Status sendTweet(String message) throws IOException, TwitterException {
-        GetTwitterInstance twitterInstance = new GetTwitterInstance();
-        Status status = twitterInstance.getTwitter().updateStatus(message);
-        return status;
     }
 }
