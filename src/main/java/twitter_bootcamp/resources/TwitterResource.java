@@ -1,8 +1,9 @@
-package twitter_bootcamp;
+package twitter_bootcamp.resources;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
 import twitter4j.Status;
+import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 import javax.ws.rs.GET;
@@ -12,17 +13,24 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter_bootcamp.TwitterApp;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
 public class TwitterResource {
+
     private final int TWEET_LENGTH = 280;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
+
+    private Twitter twitter;
+
+    public TwitterResource(Twitter twitter) {
+        this.twitter = twitter;
+    }
 
     @GET
     @Path("/timeline")
@@ -30,14 +38,12 @@ public class TwitterResource {
         try {
             LOGGER.info("Getting Timeline.. ");
 
-            GetTwitterInstance twitterInstance = new GetTwitterInstance();
-
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitterInstance.getTwitter().getHomeTimeline())
+                    .entity(twitter.getHomeTimeline())
                     .build();
         }
-        catch (IOException | TwitterException e) {
+        catch (TwitterException e) {
             e.printStackTrace();
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -52,8 +58,7 @@ public class TwitterResource {
 
         if (message.length() <= TWEET_LENGTH) {
             try {
-                GetTwitterInstance twitterInstance = new GetTwitterInstance();
-                Status status = twitterInstance.getTwitter().updateStatus(message);
+                Status status = twitter.updateStatus(message);
 
                 LOGGER.info("Tweeting: {}", status.getText());
 
@@ -62,7 +67,7 @@ public class TwitterResource {
                         .entity(status)
                         .build();
             }
-            catch (IOException | TwitterException e) {
+            catch (TwitterException e) {
                 e.printStackTrace();
 
                 return Response
@@ -78,5 +83,9 @@ public class TwitterResource {
                     .entity("Tweet was too long. Limit tweet to " + TWEET_LENGTH + " characters.")
                     .build();
         }
+    }
+
+    public int getTweetLength() {
+        return TWEET_LENGTH;
     }
 }

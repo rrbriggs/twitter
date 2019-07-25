@@ -29,8 +29,19 @@ repositories {
 dependencies {
     // Use Twitter4J 
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
+    
     compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+    testCompile group: 'io.dropwizard', name: 'dropwizard-testing', version: dropwizardVersion
+    testImplementation "org.mockito:mockito-core:2.+"
 
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 application {
