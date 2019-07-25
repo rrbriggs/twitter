@@ -1,4 +1,4 @@
-package twitter_bootcamp;
+package twitter_bootcamp.resources;
 
 
 import org.junit.jupiter.api.Test;

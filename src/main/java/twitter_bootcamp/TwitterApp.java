@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 import twitter_bootcamp.config.AppConfiguration;
+import twitter_bootcamp.config.GetTwitterInstance;
 import twitter_bootcamp.resources.TwitterResource;
 
 import java.io.IOException;
