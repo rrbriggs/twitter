@@ -9,7 +9,10 @@ import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.config.GetTwitterInstance;
 import twitter_bootcamp.resources.TwitterResource;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class TwitterApp extends Application<AppConfiguration> {
 
@@ -24,7 +27,13 @@ public class TwitterApp extends Application<AppConfiguration> {
         LOGGER.info("Starting application with name: {}", configuration.getAppName());
         LOGGER.info("Registering REST resources..");
 
-        GetTwitterInstance twitterInstance = new GetTwitterInstance();
+        Properties properties = new Properties();
+        InputStream inputStream = new FileInputStream("Config.properties");
+        properties.load(inputStream);
+        inputStream.close();
+
+
+        GetTwitterInstance twitterInstance = new GetTwitterInstance(properties);
         Twitter twitter = twitterInstance.getTwitter();
 
         environment.jersey().register(new TwitterResource(twitter));

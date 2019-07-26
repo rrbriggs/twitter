@@ -12,37 +12,24 @@ import java.util.Properties;
 public class GetTwitterInstance {
     private Twitter twitter;
 
-    public GetTwitterInstance() {
-        try {
-            Properties properties = new Properties();
-            InputStream inputStream = new FileInputStream("Config.properties");
-            properties.load(inputStream);
+    public GetTwitterInstance(Properties properties) {
+        // populate tokens and keys from properties file
+        String CONSUMER_KEY = properties.getProperty("CONSUMER_KEY");
+        String CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
+        String ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
+        String ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
 
-            // populate tokens and keys from properties file
-            String CONSUMER_KEY = properties.getProperty("CONSUMER_KEY");
-            String CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
-            String ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
-            String ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey(CONSUMER_KEY)
+                .setOAuthConsumerSecret(CONSUMER_SECRET_KEY)
+                .setOAuthAccessToken(ACCESS_TOKEN)
+                .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
 
-            ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setDebugEnabled(true)
-                    .setOAuthConsumerKey(CONSUMER_KEY)
-                    .setOAuthConsumerSecret(CONSUMER_SECRET_KEY)
-                    .setOAuthAccessToken(ACCESS_TOKEN)
-                    .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        Twitter twitter = tf.getInstance();
 
-            TwitterFactory tf = new TwitterFactory(cb.build());
-            Twitter twitter = tf.getInstance();
-
-            inputStream.close();
-
-            this.twitter = twitter;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Config.properties not found");
-        }
-
+        this.twitter = twitter;
     }
 
     public Twitter getTwitter() {
