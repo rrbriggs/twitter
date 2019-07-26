@@ -13,18 +13,12 @@ public class GetTwitterInstance {
     private Twitter twitter;
 
     public GetTwitterInstance(Properties properties) {
-        // populate tokens and keys from properties file
-        String CONSUMER_KEY = properties.getProperty("CONSUMER_KEY");
-        String CONSUMER_SECRET_KEY = properties.getProperty("CONSUMER_SECRET_KEY");
-        String ACCESS_TOKEN = properties.getProperty("ACCESS_TOKEN");
-        String ACCESS_TOKEN_SECRET = properties.getProperty("ACCESS_TOKEN_SECRET");
-
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(CONSUMER_KEY)
-                .setOAuthConsumerSecret(CONSUMER_SECRET_KEY)
-                .setOAuthAccessToken(ACCESS_TOKEN)
-                .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+                .setOAuthConsumerKey(properties.getProperty("CONSUMER_KEY"))
+                .setOAuthConsumerSecret(properties.getProperty("CONSUMER_SECRET_KEY"))
+                .setOAuthAccessToken(properties.getProperty("ACCESS_TOKEN"))
+                .setOAuthAccessTokenSecret(properties.getProperty("ACCESS_TOKEN_SECRET"));
 
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
