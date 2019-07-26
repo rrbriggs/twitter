@@ -1,0 +1,5 @@
+appName: YourAppName
+consumerKey: "YourConsumerKey"
+consumerSecretKey: "YourConsumerSecretKey"
+accessTokenSecret: "YourAccessTokenSecret"
+accessToken: "YourAccessToken"

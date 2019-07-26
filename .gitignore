@@ -29,6 +29,7 @@ build
 
 # Config files
 Config.properties
+app_config.yml
 
 #IntelliJ
 .idea/
