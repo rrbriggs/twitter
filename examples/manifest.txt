@@ -1,3 +1,0 @@
-Main-Class: twitter_bootcamp.TwitterApp
-Class-Path: twitter4j-core-4.0.7.jar twitter_bootcamp.config.AppConfiguration twitter_bootcamp.config.GetTwitterInstance twitter_bootcamp.resources.TwitterResource
-

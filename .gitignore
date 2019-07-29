@@ -29,6 +29,10 @@ build
 
 # Config files
 Config.properties
+app_config.yml
+
+# Misc
+manifest.txt
 
 #IntelliJ
 .idea/

@@ -1,0 +1,6 @@
+appName: YourAppName
+twitterAuth:
+  consumerKey: "YourConsumerKey"
+  consumerSecretKey: "YourConsumerSecretKey"
+  accessTokenSecret: "YourAccessTokenSecret"
+  accessToken: "YourAccessToken"

@@ -8,14 +8,14 @@ This application has the basic functionality of:
 
 ## Building and running with Gradle:
 
-Clone the repo with `git clone --single-branch --branch dropwizard https://github.com/rrbriggs/BrigBot.git`
+Clone the repo with `git clone --single-branch --branch config https://github.com/rrbriggs/BrigBot.git`
 
-*This application requires a Config.properties file that contains your Twitter tokens and keys.
-There an example file called (example_Config.properties) that lives in the examples folder of this project.
-Once you have populated this file with your information, make sure to rename the file to `Config.properties`.
-Note: for this file, you must add your key or token after the "=" for example:*
+*This application requires an app_config.yml file that contains your Twitter tokens and keys.
+There an example file called (app_config-example.yml) that lives in the config folder of this project.
+Once you have populated this file with your information, make sure to rename the file to `app_config.yml`.
+Note: for this file, you must add your key or token after the ":" for example:*
 
-`CONSUMER_KEY=YourConsumerKey`
+`consumerKey: "YourConsumerKey"`
 
 Open the directory in terminal or navigate to it, then to build the app enter:
 
