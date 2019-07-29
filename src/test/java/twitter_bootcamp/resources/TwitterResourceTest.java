@@ -9,6 +9,7 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.User;
 
 import javax.ws.rs.core.Response;
 
@@ -26,6 +27,9 @@ public class TwitterResourceTest {
 
     @Mock
     Status mockStatus;
+
+    @Mock
+    User user;
 
     @Mock
     ResponseList<Status> mockTwitterResponseList;
@@ -69,6 +73,8 @@ public class TwitterResourceTest {
         String message = "Testing testPostTweet";
 
         when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
+        when(mockStatus.getUser()).thenReturn(user);
+        when(user.getName()).thenReturn("Test User");
 
         Response response = twitterResource.postTweet(message);
 
