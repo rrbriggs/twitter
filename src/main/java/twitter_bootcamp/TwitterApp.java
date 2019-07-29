@@ -9,6 +9,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter_bootcamp.config.AppConfiguration;
+import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.resources.TwitterResource;
 
 
@@ -24,12 +25,14 @@ public class TwitterApp extends Application<AppConfiguration> {
     public void run(final AppConfiguration configuration, final Environment environment) {
         LOGGER.info("Registering REST resources..");
 
+        TwitterAuth twitterAuth = configuration.getTwitterAuth();
+
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(configuration.getConsumerKey())
-                .setOAuthConsumerSecret(configuration.getConsumerSecretKey())
-                .setOAuthAccessToken(configuration.getAccessToken())
-                .setOAuthAccessTokenSecret(configuration.getAccessTokenSecret());
+                .setOAuthConsumerKey(twitterAuth.getConsumerKey())
+                .setOAuthConsumerSecret(twitterAuth.getConsumerSecretKey())
+                .setOAuthAccessToken(twitterAuth.getAccessToken())
+                .setOAuthAccessTokenSecret(twitterAuth.getAccessTokenSecret());
 
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
