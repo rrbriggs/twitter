@@ -23,10 +23,10 @@ public class TwitterApp extends Application<AppConfiguration> {
 
     @Override
     public void run(final AppConfiguration configuration, final Environment environment) {
-        LOGGER.info("Registering REST resources..");
 
         TwitterAuth twitterAuth = configuration.getTwitterAuth();
 
+        LOGGER.info("Setting twitter OAuth config: ");
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey(twitterAuth.getConsumerKey())
@@ -37,6 +37,7 @@ public class TwitterApp extends Application<AppConfiguration> {
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
 
+        LOGGER.info("Registering REST resources..");
         environment.jersey().register(new TwitterResource(twitter));
     }
 }
