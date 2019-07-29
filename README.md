@@ -36,7 +36,7 @@ For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timelin
 In terminal, at the project root directory run:
 `./gradlew clean test`
 
-## Running test coverage
+## Running test coverage:
 In terminal at the project root directory run:
 `./gradlew clean build jacocoTestReport`
 
