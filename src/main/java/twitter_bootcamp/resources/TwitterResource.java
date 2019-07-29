@@ -44,7 +44,8 @@ public class TwitterResource {
                     .build();
         }
         catch (TwitterException e) {
-            e.printStackTrace();
+            LOGGER.warn("Twitter Exception thrown while attempting to getTimeline()", e);
+
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("There was an error getting your timeline. Please try again in a few minutes.")
@@ -60,7 +61,7 @@ public class TwitterResource {
             try {
                 Status status = twitter.updateStatus(message);
 
-                LOGGER.info("Tweeting: {}", status.getText());
+                LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
 
                 return Response
                         .status(Response.Status.CREATED)
@@ -68,7 +69,7 @@ public class TwitterResource {
                         .build();
             }
             catch (TwitterException e) {
-                e.printStackTrace();
+                LOGGER.warn("Twitter Exception thrown while attempting to postTweet() with message of: {}", message, e);
 
                 return Response
                         .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -78,6 +79,8 @@ public class TwitterResource {
             }
         }
         else {
+            LOGGER.warn("Attempted to post tweet that exceeds TWEET_LENGTH: {}", TWEET_LENGTH);
+
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Tweet was too long. Limit tweet to " + TWEET_LENGTH + " characters.")
