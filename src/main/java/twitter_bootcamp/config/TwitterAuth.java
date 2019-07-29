@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class TwitterAuth {
-    @NotEmpty
-    private String consumerKey;
+    @NotEmpty private String consumerKey;
     @NotEmpty private String consumerSecretKey;
     @NotEmpty private String accessToken;
     @NotEmpty private String accessTokenSecret;
