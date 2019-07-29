@@ -10,6 +10,7 @@ import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
+import twitter_bootcamp.services.Twitter4JService;
 
 import javax.ws.rs.core.Response;
 
@@ -21,6 +22,9 @@ import static org.mockito.Mockito.when;
 public class TwitterResourceTest {
 
     TwitterResource twitterResource;
+
+    @Mock
+    Twitter4JService twitter4JService;
 
     @Mock
     Twitter twitter;
@@ -42,14 +46,14 @@ public class TwitterResourceTest {
 
         MockitoAnnotations.initMocks(this);
 
-        twitterResource = new TwitterResource(twitter);
+        twitterResource = new TwitterResource(twitter4JService);
 
         mockTwitterResponseList.add(mockStatus);
     }
 
     @Test
     final void testGetTwitterTimeline() throws TwitterException {
-        when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
+        when(twitter4JService.getTwitterTimeline()).thenReturn(mockTwitterResponseList);
         Response response = twitterResource.getTimeline();
 
         // test response data is what is expected
@@ -61,7 +65,7 @@ public class TwitterResourceTest {
     @Test
     final void getTimelineTwitterExceptionThrown() throws TwitterException {
 
-        when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
+        when(twitter4JService.getTwitterTimeline()).thenThrow(mockTwitterException);
 
         Response response = twitterResource.getTimeline();
 
