@@ -47,7 +47,7 @@ public class TwitterResource {
                     .build();
         }
         catch (TwitterException e) {
-            LOGGER.warn("Twitter Exception thrown while attempting to getTimeline()", e);
+            LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
 
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -73,7 +73,7 @@ public class TwitterResource {
                         .build();
             }
             catch (TwitterException e) {
-                LOGGER.warn("Twitter Exception thrown while attempting to postTweet() with message of: {}", message, e);
+                LOGGER.error("Twitter Exception thrown while attempting to postTweet() with message of: {}", message, e);
 
                 return Response
                         .status(Response.Status.INTERNAL_SERVER_ERROR)
