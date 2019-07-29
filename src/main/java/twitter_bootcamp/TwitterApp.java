@@ -18,6 +18,10 @@ public class TwitterApp extends Application<AppConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
 
     public static void main(final String[] args) throws Exception {
+        if (args.length != 2) {
+            LOGGER.error("Incorrect number of arguments. The first argument must be 'server'. The second argument" +
+                    " needs to be the name of the config yaml file, eg: 'app_config.yml'");
+        }
         new TwitterApp().run(args);
     }
 
