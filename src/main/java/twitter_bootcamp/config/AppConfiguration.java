@@ -11,9 +11,7 @@ public class AppConfiguration extends Configuration {
 
     @NotEmpty private String appName;
 
-    @Valid
-    @NotEmpty
-    private TwitterAuth twitterAuth;
+    @Valid private TwitterAuth twitterAuth;
 
     @JsonProperty public String getAppName() {
         return appName;
