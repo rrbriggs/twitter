@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
+
 
 public class AppConfiguration extends Configuration {
 
     @NotEmpty private String appName;
 
-//    @Valid
-//    @NotEmpty
+    @Valid
+    @NotEmpty
     private TwitterAuth twitterAuth;
 
     @JsonProperty public String getAppName() {
@@ -29,7 +31,4 @@ public class AppConfiguration extends Configuration {
     public void setTwitterAuth(TwitterAuth twitterAuth) {
         this.twitterAuth = twitterAuth;
     }
-
-
-
 }

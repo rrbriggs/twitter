@@ -21,5 +21,4 @@ public class TwitterAuth {
     @JsonProperty public String getConsumerSecretKey() { return consumerSecretKey; }
     @JsonProperty public String getAccessToken() { return accessToken; }
     @JsonProperty public String getAccessTokenSecret() { return accessTokenSecret; }
-
 }
