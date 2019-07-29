@@ -76,7 +76,7 @@ public class TwitterResourceTest {
     final void testPostTweetResponseMatchesStatus() throws TwitterException {
         String message = "Testing testPostTweet";
 
-        when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
+        when(twitter4JService.sendTweet(anyString())).thenReturn(mockStatus);
         when(mockStatus.getUser()).thenReturn(user);
         when(user.getName()).thenReturn("Test User");
 
@@ -92,7 +92,7 @@ public class TwitterResourceTest {
     final void testPostTweetExceptionThrown() throws TwitterException {
         String message = "Testing testPostTweet";
 
-        when(twitter.updateStatus(anyString())).thenThrow(mockTwitterException);
+        when(twitter4JService.sendTweet(anyString())).thenThrow(mockTwitterException);
 
         Response response = twitterResource.postTweet(message);
 
@@ -105,7 +105,7 @@ public class TwitterResourceTest {
         char[] charArray = new char[twitterResource.getTweetLength() + 1];
         String maxLenString = new String(charArray);
 
-        when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
+        when(twitter4JService.sendTweet(anyString())).thenReturn(mockStatus);
 
         Response response = twitterResource.postTweet(maxLenString);
 
