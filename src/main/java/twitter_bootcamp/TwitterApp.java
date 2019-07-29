@@ -5,12 +5,9 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
 import twitter_bootcamp.config.AppConfiguration;
-import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.resources.TwitterResource;
+import twitter_bootcamp.services.Twitter4JService;
 
 
 public class TwitterApp extends Application<AppConfiguration> {
@@ -22,26 +19,18 @@ public class TwitterApp extends Application<AppConfiguration> {
             LOGGER.error("Incorrect number of arguments. The first argument must be 'server'. The second argument" +
                     " needs to be the name of the config yaml file, eg: 'app_config.yml'");
         }
-        new TwitterApp().run(args);
+        else {
+            new TwitterApp().run(args);
+        }
     }
 
     @Override
     public void run(final AppConfiguration configuration, final Environment environment) {
 
-        TwitterAuth twitterAuth = configuration.getTwitterAuth();
-
-        LOGGER.info("Setting twitter OAuth config: ");
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(twitterAuth.getConsumerKey())
-                .setOAuthConsumerSecret(twitterAuth.getConsumerSecretKey())
-                .setOAuthAccessToken(twitterAuth.getAccessToken())
-                .setOAuthAccessTokenSecret(twitterAuth.getAccessTokenSecret());
-
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        Twitter twitter = tf.getInstance();
+        Twitter4JService twitter4JService = Twitter4JService.getInstance();
+        twitter4JService.setConfiguration(configuration);
 
         LOGGER.info("Registering REST resources..");
-        environment.jersey().register(new TwitterResource(twitter));
+        environment.jersey().register(new TwitterResource(twitter4JService));
     }
 }

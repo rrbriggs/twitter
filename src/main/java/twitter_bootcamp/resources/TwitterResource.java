@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter_bootcamp.TwitterApp;
+import twitter_bootcamp.services.Twitter4JService;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,8 +29,10 @@ public class TwitterResource {
 
     private Twitter twitter;
 
-    public TwitterResource(Twitter twitter) {
-        this.twitter = twitter;
+    private Twitter4JService twitter4JService;
+
+    public TwitterResource(Twitter4JService twitter4JService) {
+        this.twitter4JService = twitter4JService;
     }
 
     @GET
@@ -40,7 +43,7 @@ public class TwitterResource {
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitter.getHomeTimeline())
+                    .entity(twitter4JService.getTwitterTimeline())
                     .build();
         }
         catch (TwitterException e) {
@@ -59,8 +62,9 @@ public class TwitterResource {
 
         if (message.length() <= TWEET_LENGTH) {
             try {
-                Status status = twitter.updateStatus(message);
+                Status status = twitter4JService.sendTweet(message);
 
+                // todo: move this to the t4jservice?
                 LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
 
                 return Response
