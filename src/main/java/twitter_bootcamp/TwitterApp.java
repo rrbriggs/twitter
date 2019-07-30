@@ -6,7 +6,7 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter_bootcamp.config.AppConfiguration;
-import twitter_bootcamp.resources.TwitterResource;
+import twitter_bootcamp.resources.TwitterResources;
 import twitter_bootcamp.services.Twitter4JService;
 
 
@@ -31,6 +31,6 @@ public class TwitterApp extends Application<AppConfiguration> {
         twitter4JService.setConfiguration(configuration);
 
         LOGGER.info("Registering REST resources..");
-        environment.jersey().register(new TwitterResource(twitter4JService));
+        environment.jersey().register(new TwitterResources(twitter4JService));
     }
 }

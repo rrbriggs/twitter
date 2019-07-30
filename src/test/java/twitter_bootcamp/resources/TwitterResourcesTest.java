@@ -18,9 +18,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
-public class TwitterResourceTest {
+public class TwitterResourcesTest {
 
-    TwitterResource twitterResource;
+    TwitterResources twitterResources;
 
     @Mock
     Twitter4JService twitter4JService;
@@ -45,7 +45,7 @@ public class TwitterResourceTest {
 
         MockitoAnnotations.initMocks(this);
 
-        twitterResource = new TwitterResource(twitter4JService);
+        twitterResources = new TwitterResources(twitter4JService);
 
         mockTwitterResponseList.add(mockStatus);
     }
@@ -53,7 +53,7 @@ public class TwitterResourceTest {
     @Test
     final void getTimeline_ResponseMatchesStatus() throws Exception {
         when(twitter4JService.getTwitterTimeline()).thenReturn(mockTwitterResponseList);
-        Response response = twitterResource.getTimeline();
+        Response response = twitterResources.getTimeline();
 
         // test response data is what is expected
         assertEquals(mockTwitterResponseList, response.getEntity());
@@ -66,7 +66,7 @@ public class TwitterResourceTest {
 
         when(twitter4JService.getTwitterTimeline()).thenThrow(twitter4JServiceException);
 
-        Response response = twitterResource.getTimeline();
+        Response response = twitterResources.getTimeline();
 
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
@@ -79,7 +79,7 @@ public class TwitterResourceTest {
         when(mockStatus.getUser()).thenReturn(user);
         when(user.getName()).thenReturn("Test User");
 
-        Response response = twitterResource.postTweet(message);
+        Response response = twitterResources.postTweet(message);
 
         // test response data is what is expected
         assertEquals(mockStatus, response.getEntity());
@@ -92,7 +92,7 @@ public class TwitterResourceTest {
 
         when(twitter4JService.sendTweet(anyString())).thenThrow(twitter4JServiceException);
 
-        Response response = twitterResource.postTweet(anyString());
+        Response response = twitterResources.postTweet(anyString());
 
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
@@ -101,7 +101,7 @@ public class TwitterResourceTest {
     final void postTweet_RuntimeExceptionThrownResponseInternalServerError() throws Twitter4JServiceException {
         when(twitter4JService.sendTweet(anyString())).thenThrow(runtimeException);
 
-        Response response = twitterResource.postTweet(anyString());
+        Response response = twitterResources.postTweet(anyString());
 
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }

@@ -21,13 +21,13 @@ import twitter_bootcamp.services.Twitter4JServiceException;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
-public class TwitterResource {
+public class TwitterResources {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
 
     private Twitter4JService twitter4JService;
 
-    public TwitterResource(Twitter4JService twitter4JService) {
+    public TwitterResources(Twitter4JService twitter4JService) {
         this.twitter4JService = twitter4JService;
     }
 
