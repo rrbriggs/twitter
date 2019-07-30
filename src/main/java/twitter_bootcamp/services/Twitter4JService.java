@@ -32,35 +32,24 @@ public final class Twitter4JService {
         this.configuration = configuration;
     }
 
-    public ResponseList<Status> getTwitterTimeline() {
-        try {
-            LOGGER.info("Getting Timeline.. ");
-            return twitter.getHomeTimeline();
+    public ResponseList<Status> getTwitterTimeline() throws TwitterException {
+        LOGGER.info("Getting Timeline.. ");
+        return twitter.getHomeTimeline();
+    }
+
+    public Status sendTweet(String message) throws Twitter4JServiceException, TwitterException {
+        if (message.length() <= MAX_TWEET_LENGTH) {
+            Status status = twitter.updateStatus(message);
+            LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
+
+            return status;
         }
-        catch (TwitterException e) {
-            LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
-            return null;
+        else {
+            LOGGER.warn("User tweet message exceeded tweet max length. User tweet: {}", message);
+            throw new Twitter4JServiceException("Maximum tweet length exceeded.");
         }
     }
 
-    public Status sendTweet(String message) {
-        try {
-            if (message.length() <= MAX_TWEET_LENGTH) {
-                Status status = twitter.updateStatus(message);
-                LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
-
-                return status;
-            }
-            else {
-                LOGGER.warn("User tweet message exceeded tweet max length. User tweet: {}", message);
-                return null;
-            }
-        }
-        catch (TwitterException e) {
-            LOGGER.error("Twitter Exception thrown while attempting to postTweet() with message of: {}", message, e);
-            return null;
-        }
-    }
 
     public Twitter getTwitter() {
         TwitterAuth twitterAuth = configuration.getTwitterAuth();

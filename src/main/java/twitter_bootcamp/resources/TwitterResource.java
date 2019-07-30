@@ -15,8 +15,10 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.TwitterException;
 import twitter_bootcamp.TwitterApp;
 import twitter_bootcamp.services.Twitter4JService;
+import twitter_bootcamp.services.Twitter4JServiceException;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
@@ -36,9 +38,9 @@ public class TwitterResource {
 
         LOGGER.info("GET request to get twitter timeline. ");
 
-        ResponseList<Status> twitterResponse = twitter4JService.getTwitterTimeline();
+        try {
+            ResponseList<Status> twitterResponse = twitter4JService.getTwitterTimeline();
 
-        if (twitterResponse != null) {
             LOGGER.info("Timeline received successfully.");
 
             return Response
@@ -46,8 +48,8 @@ public class TwitterResource {
                     .entity(twitterResponse)
                     .build();
         }
-        else {
-            LOGGER.error("Error while trying to get timeline from Twitter4JService, returned null value.");
+        catch (TwitterException e) {
+            LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
 
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -61,17 +63,17 @@ public class TwitterResource {
     public Response postTweet(@FormParam("message") @NotEmpty String message) {
         LOGGER.info("POST request to send a tweet received. ");
 
-        Status status = twitter4JService.sendTweet(message);
+        try {
+            Status status = twitter4JService.sendTweet(message);
 
-        if (status != null) {
             LOGGER.info("Tweet successfully sent. ");
             return Response
                     .status(Response.Status.CREATED)
                     .entity(status)
                     .build();
         }
-        else {
-            LOGGER.error("Status returned from Twitter4JService is null: ");
+        catch (TwitterException | Twitter4JServiceException e) {
+            LOGGER.error("Error posting tweet: ", e);
 
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
