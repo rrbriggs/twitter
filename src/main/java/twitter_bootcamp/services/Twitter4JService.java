@@ -32,12 +32,12 @@ public final class Twitter4JService {
         this.configuration = configuration;
     }
 
-    public ResponseList<Status> getTwitterTimeline() throws TwitterException {
+    public ResponseList<Status> getTwitterTimeline() throws Exception {
         LOGGER.info("Getting Timeline.. ");
         return twitter.getHomeTimeline();
     }
 
-    public Status sendTweet(String message) throws Twitter4JServiceException, TwitterException {
+    public Status sendTweet(String message) throws Exception {
         if (message.length() <= MAX_TWEET_LENGTH) {
             Status status = twitter.updateStatus(message);
             LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());

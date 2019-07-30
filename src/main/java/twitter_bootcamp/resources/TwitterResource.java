@@ -48,7 +48,7 @@ public class TwitterResource {
                     .entity(twitterResponse)
                     .build();
         }
-        catch (TwitterException e) {
+        catch (Exception e) {
             LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
 
             return Response
@@ -72,7 +72,7 @@ public class TwitterResource {
                     .entity(status)
                     .build();
         }
-        catch (TwitterException | Twitter4JServiceException e) {
+        catch (Exception e) {
             LOGGER.error("Error posting tweet: ", e);
 
             return Response
