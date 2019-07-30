@@ -2,9 +2,8 @@ package twitter_bootcamp.resources;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
+import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,11 +22,7 @@ import twitter_bootcamp.services.Twitter4JService;
 @Produces(MediaType.APPLICATION_JSON)
 public class TwitterResource {
 
-    private final int TWEET_LENGTH = 280;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
-
-    private Twitter twitter;
 
     private Twitter4JService twitter4JService;
 
@@ -38,16 +33,21 @@ public class TwitterResource {
     @GET
     @Path("/timeline")
     public Response getTimeline() {
-        try {
-            LOGGER.info("Getting Timeline.. ");
+
+        LOGGER.info("GET request to get twitter timeline. ");
+
+        ResponseList<Status> twitterResponse = twitter4JService.getTwitterTimeline();
+
+        if (twitterResponse != null) {
+            LOGGER.info("Timeline received successfully.");
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitter4JService.getTwitterTimeline())
+                    .entity(twitterResponse)
                     .build();
         }
-        catch (TwitterException e) {
-            LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
+        else {
+            LOGGER.error("Error while trying to get timeline from Twitter4JService, returned null value.");
 
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -59,40 +59,24 @@ public class TwitterResource {
     @POST
     @Path("/tweet")
     public Response postTweet(@FormParam("message") @NotEmpty String message) {
+        LOGGER.info("POST request to send a tweet received. ");
 
-        if (message.length() <= TWEET_LENGTH) {
-            try {
-                Status status = twitter4JService.sendTweet(message);
+        Status status = twitter4JService.sendTweet(message);
 
-                // todo: move this to the t4jservice?
-                LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
-
-                return Response
-                        .status(Response.Status.CREATED)
-                        .entity(status)
-                        .build();
-            }
-            catch (TwitterException e) {
-                LOGGER.error("Twitter Exception thrown while attempting to postTweet() with message of: {}", message, e);
-
-                return Response
-                        .status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity("The problem here is with us, not you. If the problem persists, " +
-                                "submit an issue (https://github.com/rrbriggs/BrigBot/issues)")
-                        .build();
-            }
-        }
-        else {
-            LOGGER.warn("Attempted to post tweet that exceeds TWEET_LENGTH: {}", TWEET_LENGTH);
+        if (status != null) {
+            LOGGER.info("Tweet successfully sent. ");
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(status)
+                    .build();
+        } else {
+            LOGGER.error("Status returned from Twitter4JService is null: ");
 
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Tweet was too long. Limit tweet to " + TWEET_LENGTH + " characters.")
+                    .entity("There was an issue posting your tweet. Ensure the tweet length does not exceed "
+                            + twitter4JService + "characters.")
                     .build();
         }
-    }
-
-    public int getTweetLength() {
-        return TWEET_LENGTH;
     }
 }

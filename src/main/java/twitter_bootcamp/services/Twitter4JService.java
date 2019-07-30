@@ -18,18 +18,42 @@ public final class Twitter4JService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
 
+    private final int MAX_TWEET_LENGTH = 280;
+
     private AppConfiguration configuration;
 
     private Twitter twitter;
 
     private Twitter4JService() {}
 
-    public ResponseList<Status> getTwitterTimeline() throws TwitterException {
-        return twitter.getHomeTimeline();
+    public ResponseList<Status> getTwitterTimeline() {
+        try {
+            LOGGER.info("Getting Timeline.. ");
+            return twitter.getHomeTimeline();
+        }
+        catch (TwitterException e) {
+            LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
+            return null;
+        }
     }
 
-    public Status sendTweet(String message) throws TwitterException {
-        return twitter.updateStatus(message);
+    public Status sendTweet(String message) {
+        try {
+            if (message.length() <= MAX_TWEET_LENGTH) {
+                Status status = twitter.updateStatus(message);
+                LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
+
+                return status;
+            }
+            else {
+                LOGGER.warn("User tweet message exceeded tweet max length. User tweet: {}", message);
+                return null;
+            }
+        }
+        catch (TwitterException e) {
+            LOGGER.error("Twitter Exception thrown while attempting to postTweet() with message of: {}", message, e);
+            return null;
+        }
     }
 
     public Twitter getTwitter() {
@@ -60,6 +84,11 @@ public final class Twitter4JService {
 
         twitter = getTwitter();
     }
+
+    public int getMaxTweetLength() {
+        return MAX_TWEET_LENGTH;
+    }
+
 
     public static Twitter4JService getInstance() {
         return INSTANCE;
