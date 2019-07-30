@@ -26,6 +26,12 @@ public final class Twitter4JService {
 
     private Twitter4JService() {}
 
+    // for testing purposes
+    public Twitter4JService(Twitter twitter, AppConfiguration configuration) {
+        this.twitter = twitter;
+        this.configuration = configuration;
+    }
+
     public ResponseList<Status> getTwitterTimeline() {
         try {
             LOGGER.info("Getting Timeline.. ");
