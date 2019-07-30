@@ -69,7 +69,8 @@ public class TwitterResource {
                     .status(Response.Status.CREATED)
                     .entity(status)
                     .build();
-        } else {
+        }
+        else {
             LOGGER.error("Status returned from Twitter4JService is null: ");
 
             return Response
