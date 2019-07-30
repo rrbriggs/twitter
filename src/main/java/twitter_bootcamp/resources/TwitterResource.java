@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.TwitterException;
 import twitter_bootcamp.TwitterApp;
 import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
@@ -71,14 +70,24 @@ public class TwitterResource {
                     .status(Response.Status.CREATED)
                     .entity(status)
                     .build();
+
         }
-        catch (Exception e) {
-            LOGGER.error("Error posting tweet: ", e);
+        catch (Twitter4JServiceException e) {
+            LOGGER.info("Error posting tweet: ", e);
+
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("Tweet exceeded maximum allowed characters. Ensure the tweet length does not exceed "
+                            + twitter4JService + "characters.")
+                    .build();
+
+        }
+        catch (RuntimeException e) {
+            LOGGER.warn("Error posting tweet: ", e);
 
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("There was an issue posting your tweet. Ensure the tweet length does not exceed "
-                            + twitter4JService + "characters.")
+                    .entity("There was an issue posting your tweet. Please try again in a few minutes.")
                     .build();
         }
     }

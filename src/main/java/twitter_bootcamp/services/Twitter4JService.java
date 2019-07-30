@@ -32,21 +32,35 @@ public final class Twitter4JService {
         this.configuration = configuration;
     }
 
-    public ResponseList<Status> getTwitterTimeline() throws Exception {
+    public ResponseList<Status> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
-        return twitter.getHomeTimeline();
+        try {
+            return twitter.getHomeTimeline();
+        }
+        catch (TwitterException e) {
+            LOGGER.error("Error getting twitter timeline. ", e);
+            throw new Twitter4JServiceException();
+        }
     }
 
-    public Status sendTweet(String message) throws Exception {
-        if (message.length() <= MAX_TWEET_LENGTH) {
-            Status status = twitter.updateStatus(message);
-            LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
+    public Status sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
 
-            return status;
-        }
-        else {
+        // throw exception if tweet message is too long
+        if (message.length() > MAX_TWEET_LENGTH) {
             LOGGER.warn("User tweet message exceeded tweet max length. User tweet: {}", message);
             throw new Twitter4JServiceException("Maximum tweet length exceeded.");
+        }
+        else {
+            try {
+                Status status = twitter.updateStatus(message);
+                LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
+
+                return status;
+            }
+            catch (TwitterException e) {
+                LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
+                throw new RuntimeException();
+            }
         }
     }
 
