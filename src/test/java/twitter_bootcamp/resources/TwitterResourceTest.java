@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.TwitterException;
 import twitter4j.User;
 import twitter_bootcamp.services.Twitter4JService;
 
@@ -34,9 +33,6 @@ public class TwitterResourceTest {
     @Mock
     ResponseList<Status> mockTwitterResponseList;
 
-    @Mock
-    TwitterException mockTwitterException;
-
     @BeforeEach
     void setUp() {
 
@@ -48,7 +44,7 @@ public class TwitterResourceTest {
     }
 
     @Test
-    final void testGetTwitterTimeline() throws TwitterException {
+    final void testGetTwitterTimeline() {
         when(twitter4JService.getTwitterTimeline()).thenReturn(mockTwitterResponseList);
         Response response = twitterResource.getTimeline();
 
@@ -59,9 +55,9 @@ public class TwitterResourceTest {
     }
 
     @Test
-    final void getTimelineTwitterExceptionThrown() throws TwitterException {
+    final void getTimelineTwitterResponseListReturnedNull() {
 
-        when(twitter4JService.getTwitterTimeline()).thenThrow(mockTwitterException);
+        when(twitter4JService.getTwitterTimeline()).thenReturn(null);
 
         Response response = twitterResource.getTimeline();
 
@@ -69,7 +65,7 @@ public class TwitterResourceTest {
     }
 
     @Test
-    final void testPostTweetResponseMatchesStatus() throws TwitterException {
+    final void testPostTweetResponseMatchesStatus() {
         String message = "Testing testPostTweet";
 
         when(twitter4JService.sendTweet(anyString())).thenReturn(mockStatus);
@@ -85,25 +81,11 @@ public class TwitterResourceTest {
     }
 
     @Test
-    final void testPostTweetExceptionThrown() throws TwitterException {
-        String message = "Testing testPostTweet";
+    final void testPostTweetStatusReturnNull() {
 
-        when(twitter4JService.sendTweet(anyString())).thenThrow(mockTwitterException);
+        when(twitter4JService.sendTweet(anyString())).thenReturn(null);
 
-        Response response = twitterResource.postTweet(message);
-
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    final void testPostTweetCharLength() throws TwitterException {
-        //build string of max tweet length + 1
-        char[] charArray = new char[twitterResource.getTweetLength() + 1];
-        String maxLenString = new String(charArray);
-
-        when(twitter4JService.sendTweet(anyString())).thenReturn(mockStatus);
-
-        Response response = twitterResource.postTweet(maxLenString);
+        Response response = twitterResource.postTweet(anyString());
 
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
