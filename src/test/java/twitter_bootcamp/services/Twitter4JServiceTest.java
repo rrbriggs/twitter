@@ -70,12 +70,12 @@ public class Twitter4JServiceTest {
     }
 
     @Test
-    final void sendTweet_ReturnsStatus() throws TwitterException {
+    final void sendTweet_ReturnsStatus() throws TwitterException, Twitter4JServiceException {
         when(twitter.updateStatus(anyString())).thenReturn(mockStatus);
         when(mockStatus.getUser()).thenReturn(user);
         when(user.getName()).thenReturn("Test User");
 
-        assertEquals(mockStatus, twitter.updateStatus(anyString()));
+        assertEquals(mockStatus, twitter4JService.sendTweet(anyString()));
     }
 
     @Test
