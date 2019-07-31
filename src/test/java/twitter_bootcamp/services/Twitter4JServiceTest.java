@@ -5,13 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.User;
-import twitter4j.TwitterException;
+import twitter4j.*;
 import twitter_bootcamp.config.AppConfiguration;
+import twitter_bootcamp.models.TwitterUser;
 
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,6 +26,10 @@ public class Twitter4JServiceTest {
 
     Twitter4JService twitter4JService;
 
+    // todo: name change
+    ResponseList<Status> mockTwitterResponseList = null;
+    List<TwitterUser> twitterUserList = new ArrayList<>();
+
     @Mock
     Twitter twitter;
 
@@ -33,10 +40,11 @@ public class Twitter4JServiceTest {
     User user;
 
     @Mock
-    AppConfiguration configuration;
+    TwitterUser twitterUser;
+
 
     @Mock
-    ResponseList<Status> mockTwitterResponseList;
+    AppConfiguration configuration;
 
     @Mock
     TwitterException mockTwitterException;
@@ -46,23 +54,32 @@ public class Twitter4JServiceTest {
 
         MockitoAnnotations.initMocks(this);
 
+        mockTwitterResponseList.add(mockStatus);
+
+        twitterUserList.add(twitterUser);
+
         twitter4JService = new Twitter4JService(twitter, configuration);
 
-        mockTwitterResponseList.add(mockStatus);
     }
 
     @Test
-    final void getTwitterTimeline_ReturnsResponseList() throws Exception {
+    final void getTwitterTimeline_ReturnsResponseList() throws Twitter4JServiceException, TwitterException {
         when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
 
+        when(mockStatus.getUser()).thenReturn(user);
+        when(mockStatus.getCreatedAt()).thenReturn(new Date());
+        when(mockStatus.getText()).thenReturn("Test Message");
+        when(user.getName()).thenReturn("Test User");
+        when(user.getScreenName()).thenReturn("Test Handle");
+        when(user.getProfileImageURL()).thenReturn("Test Profile Image URL ");
+
         // test response data is what is expected
-        assertEquals(mockTwitterResponseList, twitter4JService.getTwitterTimeline());
+        assertEquals(twitterUserList, twitter4JService.getTwitterTimeline());
     }
 
     @Test
-    final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException, Twitter4JServiceException {
+    final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException {
         when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
-        //System.out.println(twitter4JService.getTwitterTimeline());
 
         assertThrows(Twitter4JServiceException.class, () -> {
             twitter4JService.getTwitterTimeline();
@@ -79,7 +96,7 @@ public class Twitter4JServiceTest {
     }
 
     @Test
-    final void sendTweet_MessageLengthExceededThrowsTwitter4JServiceException() throws Twitter4JServiceException {
+    final void sendTweet_MessageLengthExceededThrowsTwitter4JServiceException() {
         char[] charArray = new char[twitter4JService.getMaxTweetLength() + 1];
         String exceedsMaxLenString = new String(charArray);
 
@@ -89,7 +106,7 @@ public class Twitter4JServiceTest {
     }
 
     @Test
-    final void sendTweet_ErrorInUpdateStatusThrowsRuntimeError() throws Twitter4JServiceException, TwitterException {
+    final void sendTweet_ErrorInUpdateStatusThrowsRuntimeError() throws TwitterException {
         when(twitter.updateStatus(anyString())).thenThrow(mockTwitterException);
 
         assertThrows(RuntimeException.class, () -> {
