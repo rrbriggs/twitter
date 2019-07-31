@@ -5,16 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import twitter4j.*;
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.User;
+import twitter4j.TwitterException;
 import twitter_bootcamp.config.AppConfiguration;
-import twitter_bootcamp.models.TwitterUser;
 
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,9 +24,8 @@ public class Twitter4JServiceTest {
 
     Twitter4JService twitter4JService;
 
-    // todo: name change
-    ResponseList<Status> mockTwitterResponseList = null;
-    List<TwitterUser> twitterUserList = new ArrayList<>();
+    ResponseList<Status> responseList;
+
 
     @Mock
     Twitter twitter;
@@ -38,10 +35,6 @@ public class Twitter4JServiceTest {
 
     @Mock
     User user;
-
-    @Mock
-    TwitterUser twitterUser;
-
 
     @Mock
     AppConfiguration configuration;
@@ -54,27 +47,29 @@ public class Twitter4JServiceTest {
 
         MockitoAnnotations.initMocks(this);
 
-        mockTwitterResponseList.add(mockStatus);
-
-        twitterUserList.add(twitterUser);
+        responseList = new CustomResponseList<>();
 
         twitter4JService = new Twitter4JService(twitter, configuration);
 
     }
 
     @Test
-    final void getTwitterTimeline_ReturnsResponseList() throws Twitter4JServiceException, TwitterException {
-        when(twitter.getHomeTimeline()).thenReturn(mockTwitterResponseList);
+    final void getTwitterTimeline_ReturnsResponseLisPassesOnMessageEquivalent() throws Twitter4JServiceException, TwitterException {
+        // using deprecated Date type due to twitter4j using Date type
+        Date date = new Date(1, 1, 2019);
 
         when(mockStatus.getUser()).thenReturn(user);
-        when(mockStatus.getCreatedAt()).thenReturn(new Date());
+        when(mockStatus.getCreatedAt()).thenReturn(date);
         when(mockStatus.getText()).thenReturn("Test Message");
         when(user.getName()).thenReturn("Test User");
         when(user.getScreenName()).thenReturn("Test Handle");
         when(user.getProfileImageURL()).thenReturn("Test Profile Image URL ");
 
-        // test response data is what is expected
-        assertEquals(twitterUserList, twitter4JService.getTwitterTimeline());
+        responseList.add(mockStatus);
+
+        when(twitter.getHomeTimeline()).thenReturn(responseList);
+
+        assertEquals(responseList.get(0).getText(), twitter4JService.getTwitterTimeline().get(0).getMessage());
     }
 
     @Test
