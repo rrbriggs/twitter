@@ -2,7 +2,6 @@ package twitter_bootcamp.resources;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 
 import javax.ws.rs.GET;
@@ -16,8 +15,11 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter_bootcamp.TwitterApp;
+import twitter_bootcamp.models.TwitterUser;
 import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
+
+import java.util.List;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
@@ -38,13 +40,13 @@ public class TwitterResources {
         LOGGER.info("GET request to get twitter timeline. ");
 
         try {
-            ResponseList<Status> twitterResponse = twitter4JService.getTwitterTimeline();
+            List<TwitterUser> userList = twitter4JService.getTwitterTimeline();
 
             LOGGER.info("Timeline received successfully.");
 
             return Response
                     .status(Response.Status.OK)
-                    .entity(twitterResponse)
+                    .entity(userList)
                     .build();
         }
         catch (Exception e) {
