@@ -77,7 +77,7 @@ public class Twitter4JServiceTest {
     }
 
     @Test
-    final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException, Twitter4JServiceException {
+    final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException {
         when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
 
         assertThrows(Twitter4JServiceException.class, () -> {

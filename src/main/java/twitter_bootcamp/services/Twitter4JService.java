@@ -2,16 +2,13 @@ package twitter_bootcamp.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
+import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter_bootcamp.TwitterApp;
 import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.models.SocialPost;
+import twitter_bootcamp.models.SocialUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +42,18 @@ public final class Twitter4JService {
             List<SocialPost> userList = new ArrayList<>();
 
             for (Status status : twitterResponse) {
-                SocialPost user = new SocialPost();
+                SocialPost socialPost = new SocialPost();
+                SocialUser socialUser = new SocialUser();
 
-                user.setName(status.getUser().getName());
-                user.setTwitterHandle(status.getUser().getScreenName());
-                user.setProfileImageUrl(status.getUser().getProfileImageURL());
-                user.setCreatedAt(status.getCreatedAt());
-                user.setMessage(status.getText());
+                socialPost.setSocialUser(socialUser);
+                socialPost.setCreatedAt(status.getCreatedAt());
+                socialPost.setMessage(status.getText());
 
-                userList.add(user);
+                socialUser.setName(status.getUser().getName());
+                socialUser.setTwitterHandle(status.getUser().getScreenName());
+                socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
+
+                userList.add(socialPost);
             }
 
             return userList;
