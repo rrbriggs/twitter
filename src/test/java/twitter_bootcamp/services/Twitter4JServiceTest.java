@@ -40,6 +40,9 @@ public class Twitter4JServiceTest {
     AppConfiguration configuration;
 
     @Mock
+    ResponseList<Status> mockTwitterResponseList;
+
+    @Mock
     TwitterException mockTwitterException;
 
     @BeforeEach
@@ -51,6 +54,7 @@ public class Twitter4JServiceTest {
 
         twitter4JService = new Twitter4JService(twitter, configuration);
 
+        mockTwitterResponseList.add(mockStatus);
     }
 
     @Test
@@ -73,7 +77,7 @@ public class Twitter4JServiceTest {
     }
 
     @Test
-    final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException {
+    final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException, Twitter4JServiceException {
         when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
 
         assertThrows(Twitter4JServiceException.class, () -> {
@@ -92,7 +96,7 @@ public class Twitter4JServiceTest {
 
     @Test
     final void sendTweet_MessageLengthExceededThrowsTwitter4JServiceException() {
-        char[] charArray = new char[twitter4JService.getMaxTweetLength() + 1];
+        char[] charArray = new char[twitter4JService.MAX_TWEET_LENGTH + 1];
         String exceedsMaxLenString = new String(charArray);
 
         assertThrows(Twitter4JServiceException.class, () -> {

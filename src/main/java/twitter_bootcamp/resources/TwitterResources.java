@@ -84,7 +84,7 @@ public class TwitterResources {
                     .build();
 
         }
-        catch (RuntimeException e) {
+        catch (Exception e) {
             LOGGER.warn("Error posting tweet: ", e);
 
             return Response

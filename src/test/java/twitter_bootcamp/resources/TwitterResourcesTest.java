@@ -104,7 +104,7 @@ public class TwitterResourcesTest {
     }
 
     @Test
-    final void postTweet_RuntimeExceptionThrownResponseInternalServerError() throws Twitter4JServiceException {
+    final void postTweet_NonTwitter4JServiceExceptionThrownResponseInternalServerError() throws Twitter4JServiceException {
         when(twitter4JService.sendTweet(anyString())).thenThrow(runtimeException);
 
         Response response = twitterResources.postTweet(anyString());
