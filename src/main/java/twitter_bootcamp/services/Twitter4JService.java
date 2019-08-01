@@ -6,11 +6,16 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.TwitterFactory;
 import twitter_bootcamp.TwitterApp;
 import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.config.TwitterAuth;
+import twitter_bootcamp.models.SocialPost;
+import twitter_bootcamp.models.SocialUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Twitter4JService {
 
@@ -24,6 +29,7 @@ public final class Twitter4JService {
 
     private Twitter twitter;
 
+
     private Twitter4JService() {}
 
     // for testing purposes
@@ -32,10 +38,29 @@ public final class Twitter4JService {
         this.configuration = configuration;
     }
 
-    public ResponseList<Status> getTwitterTimeline() throws Twitter4JServiceException {
+    public List<SocialPost> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
-            return twitter.getHomeTimeline();
+            ResponseList<Status> twitterResponse = twitter.getHomeTimeline();
+
+            List<SocialPost> userList = new ArrayList<>();
+
+            for (Status status : twitterResponse) {
+                SocialPost socialPost = new SocialPost();
+                SocialUser socialUser = new SocialUser();
+
+                socialPost.setSocialUser(socialUser);
+                socialPost.setCreatedAt(status.getCreatedAt());
+                socialPost.setMessage(status.getText());
+
+                socialUser.setName(status.getUser().getName());
+                socialUser.setTwitterHandle(status.getUser().getScreenName());
+                socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
+
+                userList.add(socialPost);
+            }
+
+            return userList;
         }
         catch (TwitterException e) {
             LOGGER.error("Error getting twitter timeline. ", e);

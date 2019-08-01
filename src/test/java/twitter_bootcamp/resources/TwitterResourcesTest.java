@@ -5,13 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.User;
+import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
 
 import javax.ws.rs.core.Response;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -32,7 +34,10 @@ public class TwitterResourcesTest {
     User user;
 
     @Mock
-    ResponseList<Status> mockTwitterResponseList;
+    SocialPost twitterUser;
+
+    @Mock
+    List<SocialPost> twitterUserList;
 
     @Mock
     Twitter4JServiceException twitter4JServiceException;
@@ -47,16 +52,17 @@ public class TwitterResourcesTest {
 
         twitterResources = new TwitterResources(twitter4JService);
 
-        mockTwitterResponseList.add(mockStatus);
+        twitterUserList.add(twitterUser);
+
     }
 
     @Test
     final void getTimeline_ResponseMatchesStatus() throws Exception {
-        when(twitter4JService.getTwitterTimeline()).thenReturn(mockTwitterResponseList);
+        when(twitter4JService.getTwitterTimeline()).thenReturn(twitterUserList);
         Response response = twitterResources.getTimeline();
 
         // test response data is what is expected
-        assertEquals(mockTwitterResponseList, response.getEntity());
+        assertEquals(twitterUserList, response.getEntity());
         // test status code is what is expected
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
