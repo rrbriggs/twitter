@@ -64,7 +64,7 @@ public class Twitter4JServiceTest {
 
         when(mockStatus.getUser()).thenReturn(user);
         when(mockStatus.getCreatedAt()).thenReturn(date);
-        when(mockStatus.getText()).thenReturn("Test Message");
+        when(mockStatus.getText()).thenReturn("Test SocialPost");
         when(user.getName()).thenReturn("Test User");
         when(user.getScreenName()).thenReturn("Test Handle");
         when(user.getProfileImageURL()).thenReturn("Test Profile Image URL ");

@@ -2,7 +2,7 @@ package twitter_bootcamp.models;
 
 import java.util.Date;
 
-public class Message {
+public class SocialPost {
     private String message;
     private String twitterHandle;
     private String name;

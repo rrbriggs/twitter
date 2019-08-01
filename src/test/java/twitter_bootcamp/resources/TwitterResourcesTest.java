@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import twitter4j.Status;
 import twitter4j.User;
-import twitter_bootcamp.models.Message;
+import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
 
@@ -34,10 +34,10 @@ public class TwitterResourcesTest {
     User user;
 
     @Mock
-    Message twitterUser;
+    SocialPost twitterUser;
 
     @Mock
-    List<Message> twitterUserList;
+    List<SocialPost> twitterUserList;
 
     @Mock
     Twitter4JServiceException twitter4JServiceException;
