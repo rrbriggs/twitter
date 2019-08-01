@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter_bootcamp.TwitterApp;
-import twitter_bootcamp.models.TwitterUser;
+import twitter_bootcamp.models.Message;
 import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
 
@@ -40,7 +40,7 @@ public class TwitterResources {
         LOGGER.info("GET request to get twitter timeline. ");
 
         try {
-            List<TwitterUser> userList = twitter4JService.getTwitterTimeline();
+            List<Message> userList = twitter4JService.getTwitterTimeline();
 
             LOGGER.info("Timeline received successfully.");
 

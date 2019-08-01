@@ -11,7 +11,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter_bootcamp.TwitterApp;
 import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.config.TwitterAuth;
-import twitter_bootcamp.models.TwitterUser;
+import twitter_bootcamp.models.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +37,15 @@ public final class Twitter4JService {
         this.configuration = configuration;
     }
 
-    public List<TwitterUser> getTwitterTimeline() throws Twitter4JServiceException {
+    public List<Message> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
             ResponseList<Status> twitterResponse = twitter.getHomeTimeline();
 
-            List<TwitterUser> userList = new ArrayList<>();
+            List<Message> userList = new ArrayList<>();
 
             for (Status status : twitterResponse) {
-                TwitterUser user = new TwitterUser();
+                Message user = new Message();
 
                 user.setName(status.getUser().getName());
                 user.setTwitterHandle(status.getUser().getScreenName());
