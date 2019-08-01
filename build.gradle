@@ -27,7 +27,9 @@ jacocoTestReport {
         classDirectories.from = files(classDirectories.files.collect {
             fileTree(dir: it, 
                     exclude: [
-                        '**/TwitterApp.class'
+                        '**/TwitterApp.class',
+                        '**/TwitterAuth.class',
+                        '**/AppConfiguration.class'
             ])
         })
     }
