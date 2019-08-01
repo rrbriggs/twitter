@@ -80,7 +80,7 @@ public class Twitter4JServiceTest {
 
     @Test
     final void sendTweet_MessageLengthExceededThrowsTwitter4JServiceException() throws Twitter4JServiceException {
-        char[] charArray = new char[twitter4JService.getMaxTweetLength() + 1];
+        char[] charArray = new char[twitter4JService.MAX_TWEET_LENGTH + 1];
         String exceedsMaxLenString = new String(charArray);
 
         assertThrows(Twitter4JServiceException.class, () -> {
