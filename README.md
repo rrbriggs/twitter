@@ -8,7 +8,7 @@ This application has the basic functionality of:
 
 ## Building and running with Gradle:
 
-Clone the repo with `git clone --single-branch --branch config https://github.com/rrbriggs/BrigBot.git`
+Clone the repo with `git clone --single-branch --branch serv https://github.com/rrbriggs/BrigBot.git`
 
 *This application requires an app_config.yml file that contains your Twitter tokens and keys.
 There an example file called (app_config-example.yml) that lives in the config folder of this project.
@@ -34,7 +34,11 @@ For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timelin
 
 ## Running unit tests:
 In terminal, at the project root directory run:
-`gradle clean test`
+`./gradlew clean test`
+
+## Running test coverage:
+In terminal at the project root directory run:
+`./gradlew clean build jacocoTestReport`
 
 
 
