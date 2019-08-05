@@ -16,6 +16,10 @@ import twitter_bootcamp.models.SocialUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 public final class Twitter4JService {
 
@@ -68,6 +72,15 @@ public final class Twitter4JService {
         }
     }
 
+    public Optional<List<SocialPost>> filterTimeline(String message) throws Twitter4JServiceException {
+        List<SocialPost> timelineFiltered = getTwitterTimeline()
+                .stream()
+                .filter(status -> containsIgnoreCase(status.getMessage(), message))
+                .collect(Collectors.toList());
+
+        return Optional.of(timelineFiltered);
+    }
+
     public Status sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
 
         // throw exception if tweet message is too long
@@ -103,6 +116,8 @@ public final class Twitter4JService {
 
         TwitterFactory tf = new TwitterFactory(cb.build());
         twitter = tf.getInstance();
+
+
 
         return twitter;
     }

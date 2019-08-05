@@ -60,17 +60,18 @@ public class TwitterResources {
         }
     }
 
-    @GET
-    @Path("/timeline/filter")
-    public Response getTweetsFiltered(@FormParam("keyword") @NotEmpty Optional<String> keyword) {
-
-        // filter latest tweets by a keyword passed in
-
-        return Response
-                .status(Response.Status.OK)
-                .entity(null)
-                .build();
-    }
+//    @GET
+//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//    @Path("timeline/filter")
+//    public Response getTweetsFiltered(@FormParam("keyword") @NotEmpty String keyword) {
+//
+//        // filter latest tweets by a keyword passed in
+//
+//        return Response
+//                .status(Response.Status.OK)
+//                .entity("nada")
+//                .build();
+//    }
 
     @POST
     @Path("/tweet")
