@@ -20,6 +20,7 @@ import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
@@ -57,6 +58,18 @@ public class TwitterResources {
                     .entity("There was an error getting your timeline. Please try again in a few minutes.")
                     .build();
         }
+    }
+
+    @GET
+    @Path("/timeline/filter")
+    public Response getTweetsFiltered(@FormParam("keyword") @NotEmpty Optional<String> keyword) {
+
+        // filter latest tweets by a keyword passed in
+
+        return Response
+                .status(Response.Status.OK)
+                .entity(null)
+                .build();
     }
 
     @POST
