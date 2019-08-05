@@ -14,11 +14,10 @@ import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.models.SocialUser;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 public final class Twitter4JService {
@@ -45,31 +44,33 @@ public final class Twitter4JService {
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
-            ResponseList<Status> twitterResponse = twitter.getHomeTimeline();
+            List<SocialPost> streamSocialPostList = twitter.getHomeTimeline()
+                    .stream()
+                    .map(this::socialPostBuilder)
+                    .collect(toList());
 
-            List<SocialPost> timelineSocialPostList = new ArrayList<>();
-
-            for (Status status : twitterResponse) {
-                SocialPost socialPost = new SocialPost();
-                SocialUser socialUser = new SocialUser();
-
-                socialPost.setSocialUser(socialUser);
-                socialPost.setCreatedAt(status.getCreatedAt());
-                socialPost.setMessage(status.getText());
-
-                socialUser.setName(status.getUser().getName());
-                socialUser.setTwitterHandle(status.getUser().getScreenName());
-                socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
-
-                timelineSocialPostList.add(socialPost);
-            }
-
-            return Optional.of(timelineSocialPostList);
+            return Optional.of(streamSocialPostList);
         }
         catch (TwitterException e) {
             LOGGER.error("Error getting twitter timeline. ", e);
             throw new Twitter4JServiceException();
         }
+    }
+
+    private SocialPost socialPostBuilder(Status status) {
+        SocialPost socialPost = new SocialPost();
+        SocialUser socialUser = new SocialUser();
+
+        socialUser.setName(status.getUser().getName());
+        socialUser.setTwitterHandle(status.getUser().getScreenName());
+        socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
+
+        socialPost.setSocialUser(socialUser);
+        socialPost.setCreatedAt(status.getCreatedAt());
+        socialPost.setMessage(status.getText());
+
+
+        return socialPost;
     }
 
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException {
@@ -79,7 +80,7 @@ public final class Twitter4JService {
                 .get()
                 .stream()
                 .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         if (timelineFiltered.isEmpty()) {
             throw new Twitter4JServiceException("No filtered objects found");
