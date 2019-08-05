@@ -42,12 +42,12 @@ public final class Twitter4JService {
         this.configuration = configuration;
     }
 
-    public List<SocialPost> getTwitterTimeline() throws Twitter4JServiceException {
+    public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
             ResponseList<Status> twitterResponse = twitter.getHomeTimeline();
 
-            List<SocialPost> userList = new ArrayList<>();
+            List<SocialPost> timelineSocialPostList = new ArrayList<>();
 
             for (Status status : twitterResponse) {
                 SocialPost socialPost = new SocialPost();
@@ -61,10 +61,10 @@ public final class Twitter4JService {
                 socialUser.setTwitterHandle(status.getUser().getScreenName());
                 socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
 
-                userList.add(socialPost);
+                timelineSocialPostList.add(socialPost);
             }
 
-            return userList;
+            return Optional.of(timelineSocialPostList);
         }
         catch (TwitterException e) {
             LOGGER.error("Error getting twitter timeline. ", e);
@@ -72,13 +72,23 @@ public final class Twitter4JService {
         }
     }
 
-    public Optional<List<SocialPost>> filterTimeline(String message) throws Twitter4JServiceException {
+    public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException {
+        LOGGER.info("Filtering from Timeline using filterKye of {}", filterKey);
+
         List<SocialPost> timelineFiltered = getTwitterTimeline()
+                .get()
                 .stream()
-                .filter(status -> containsIgnoreCase(status.getMessage(), message))
+                .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
                 .collect(Collectors.toList());
 
-        return Optional.of(timelineFiltered);
+        if (timelineFiltered.isEmpty()) {
+            throw new Twitter4JServiceException("No filtered objects found");
+        }
+        else {
+            LOGGER.info("Successfully filtered");
+
+            return Optional.of(timelineFiltered);
+        }
     }
 
     public Status sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
