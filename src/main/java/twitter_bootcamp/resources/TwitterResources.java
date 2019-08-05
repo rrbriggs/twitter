@@ -43,10 +43,6 @@ public class TwitterResources {
                     .build())
                     .get();
 
-
-            // todo: returns one
-//            return twitter4JService.getTwitterTimeline().stream().findAny()
-//                    .map(socialPost -> Response.ok(socialPost).build()).get();
         }
         catch (Exception e) {
             LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
