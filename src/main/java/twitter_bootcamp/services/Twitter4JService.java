@@ -31,7 +31,6 @@ public final class Twitter4JService {
 
     private Twitter twitter;
 
-
     private Twitter4JService() {}
 
     // for testing purposes
@@ -73,7 +72,7 @@ public final class Twitter4JService {
     }
 
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException {
-        LOGGER.info("Filtering from Timeline using filterKye of {}", filterKey);
+        LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
         List<SocialPost> timelineFiltered = getTwitterTimeline()
                 .get()
