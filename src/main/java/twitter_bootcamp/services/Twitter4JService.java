@@ -71,13 +71,13 @@ public final class Twitter4JService {
         return socialPost;
     }
 
-    public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException {
+    public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException, TwitterException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
-        List<SocialPost> timelineFiltered = getTwitterTimeline()
-                .get()
+        List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
                 .stream()
-                .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
+                .filter(status -> containsIgnoreCase(status.getText(), filterKey))
+                .map(this::socialPostBuilder)
                 .collect(toList());
 
         if (timelineFiltered.isEmpty()) {
