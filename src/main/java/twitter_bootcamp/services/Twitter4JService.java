@@ -55,7 +55,7 @@ public final class Twitter4JService {
         }
     }
 
-    private SocialPost socialPostBuilder(Status status) {
+    protected SocialPost socialPostBuilder(Status status) {
         SocialPost socialPost = new SocialPost();
         SocialUser socialUser = new SocialUser();
 
