@@ -90,7 +90,7 @@ public final class Twitter4JService {
         }
     }
 
-    public Status sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
+    public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
 
         // throw exception if tweet message is too long
         if (message.length() > MAX_TWEET_LENGTH) {
@@ -99,10 +99,14 @@ public final class Twitter4JService {
         }
         else {
             try {
-                Status status = twitter.updateStatus(message);
-                LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
+                //Status status = twitter.updateStatus(message);
+                //LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
 
-                return status;
+                //return status;
+
+                //Optional<Status> status;
+
+                return Optional.of(twitter.updateStatus(message)).map(this::socialPostBuilder);
             }
             catch (TwitterException e) {
                 LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);

@@ -67,7 +67,8 @@ public class TwitterResources {
 
             return twitter4JService.filterTimeline(filterKey)
                     .map(filteredPost -> Response.ok(filteredPost)
-                    .build()).get();
+                    .build())
+                    .get();
         }
         catch (Twitter4JServiceException e) {
             LOGGER.info("No twitter posts match the filter key of: {}", filterKey);
@@ -94,13 +95,11 @@ public class TwitterResources {
         LOGGER.info("POST request to send a tweet received. ");
 
         try {
-            Status status = twitter4JService.sendTweet(message);
-
             LOGGER.info("Tweet successfully sent. ");
-            return Response
-                    .status(Response.Status.CREATED)
-                    .entity(status)
-                    .build();
+            return twitter4JService.sendTweet(message)
+                    .map(sentTweet -> Response.ok(sentTweet)
+                    .build())
+                    .get();
 
         }
         catch (Twitter4JServiceException e) {
