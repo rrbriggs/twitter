@@ -2,7 +2,6 @@ package twitter_bootcamp.resources;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
-import twitter4j.Status;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

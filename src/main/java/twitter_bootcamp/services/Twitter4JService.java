@@ -99,14 +99,8 @@ public final class Twitter4JService {
         }
         else {
             try {
-                //Status status = twitter.updateStatus(message);
-                //LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
-
-                //return status;
-
-                //Optional<Status> status;
-
                 return Optional.of(twitter.updateStatus(message)).map(this::socialPostBuilder);
+
             }
             catch (TwitterException e) {
                 LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
@@ -114,7 +108,6 @@ public final class Twitter4JService {
             }
         }
     }
-
 
     public Twitter getTwitter() {
         TwitterAuth twitterAuth = configuration.getTwitterAuth();
@@ -129,8 +122,6 @@ public final class Twitter4JService {
 
         TwitterFactory tf = new TwitterFactory(cb.build());
         twitter = tf.getInstance();
-
-
 
         return twitter;
     }
