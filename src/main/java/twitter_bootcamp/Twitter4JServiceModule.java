@@ -9,11 +9,11 @@ import twitter_bootcamp.services.Twitter4JService;
 
 import javax.inject.Singleton;
 
-@Module
+//@Module
 public class Twitter4JServiceModule {
 
-    @Provides
-    Twitter4JService provideTwitter4JService(Twitter twitter, AppConfiguration configuration){
-        return new Twitter4JService(twitter, configuration);
-    }
+//    @Provides
+//    Twitter4JService provideTwitter4JService(Twitter twitter, AppConfiguration configuration){
+//        return new Twitter4JService(twitter, configuration);
+//    }
 }
