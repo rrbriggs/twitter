@@ -108,8 +108,7 @@ public class TwitterResources {
 
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity("Tweet exceeded maximum allowed characters. Ensure the tweet length does not exceed "
-                            + twitter4JService.MAX_TWEET_LENGTH + "characters.")
+                    .entity(e.getMessage())
                     .build();
 
         }

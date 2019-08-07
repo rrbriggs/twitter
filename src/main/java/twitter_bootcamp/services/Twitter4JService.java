@@ -26,7 +26,7 @@ public final class Twitter4JService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
 
-    public static final int MAX_TWEET_LENGTH = 280;
+    protected static final int MAX_TWEET_LENGTH = 280;
 
     private AppConfiguration configuration;
 
@@ -96,7 +96,7 @@ public final class Twitter4JService {
             return Optional.of(twitter.updateStatus(
                         Optional.of(message)
                                 .filter(x -> x.length() <= MAX_TWEET_LENGTH)
-                                .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded."))
+                                .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded Ensure tweet is less than " + MAX_TWEET_LENGTH + " characters."))
                         ))
                     .map(this::socialPostBuilder);
 
