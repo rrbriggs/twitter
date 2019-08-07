@@ -14,6 +14,7 @@ import twitter_bootcamp.services.Twitter4JServiceException;
 import javax.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -34,10 +35,10 @@ public class TwitterResourcesTest {
     User user;
 
     @Mock
-    SocialPost twitterUser;
+    SocialPost socialPost;
 
     @Mock
-    List<SocialPost> twitterUserList;
+    List<SocialPost> socialPostList;
 
     @Mock
     Twitter4JServiceException twitter4JServiceException;
@@ -52,17 +53,17 @@ public class TwitterResourcesTest {
 
         twitterResources = new TwitterResources(twitter4JService);
 
-        twitterUserList.add(twitterUser);
+        socialPostList.add(socialPost);
 
     }
 
     @Test
     final void getTimeline_ResponseMatchesStatus() throws Exception {
-        when(twitter4JService.getTwitterTimeline()).thenReturn(twitterUserList);
+        when(twitter4JService.getTwitterTimeline()).thenReturn(Optional.of(socialPostList));
         Response response = twitterResources.getTimeline();
 
         // test response data is what is expected
-        assertEquals(twitterUserList, response.getEntity());
+        assertEquals(socialPostList, response.getEntity());
         // test status code is what is expected
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
@@ -81,16 +82,16 @@ public class TwitterResourcesTest {
     final void postTweet_ResponseMatchesStatus() throws Exception {
         String message = "Testing testPostTweet";
 
-        when(twitter4JService.sendTweet(anyString())).thenReturn(mockStatus);
+        when(twitter4JService.sendTweet(anyString())).thenReturn(Optional.of(socialPost));
         when(mockStatus.getUser()).thenReturn(user);
         when(user.getName()).thenReturn("Test User");
 
         Response response = twitterResources.postTweet(message);
 
         // test response data is what is expected
-        assertEquals(mockStatus, response.getEntity());
+        assertEquals(socialPost, response.getEntity());
         // test status code is what is expected
-        assertEquals(Response.Status.CREATED.getStatusCode() ,response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode() ,response.getStatus());
     }
 
     @Test

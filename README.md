@@ -6,7 +6,7 @@ This application has the basic functionality of:
 
 ## Building and running with Gradle:
 
-Clone the repo with `git clone --single-branch --branch serv https://github.com/rrbriggs/twitter.git`
+Clone the repo with `git clone --single-branch --branch serv https://github.com/rrbriggs/BrigBot.git`
 
 *This application requires an app_config.yml file that contains your Twitter tokens and keys.
 There an example file called (app_config-example.yml) that lives in the config folder of this project.
@@ -28,7 +28,11 @@ For example, from terminal: `curl -d "message=Hello World" -X POST http://localh
 
 ### To get your Timeline:
 GET from the endpoint /api/1.0/twitter/timeline
-For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timeline;`
+For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timeline`
+
+### To filter from your Timeline:
+GET from the endpoint /api/1.0/twitter/timeline/filter with the query param of filterKey
+For example, from terminal: `curl -X GET http://localhost:8080/api/1.0/twitter/timeline/filter?filterKey=YourFilterKeyword`
 
 ## Running unit tests:
 In terminal, at the project root directory run:
