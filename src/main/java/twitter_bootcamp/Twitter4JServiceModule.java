@@ -12,7 +12,6 @@ import javax.inject.Singleton;
 @Module
 public class Twitter4JServiceModule {
 
-    @Singleton
     @Provides
     Twitter4JService provideTwitter4JService(Twitter twitter, AppConfiguration configuration){
         return new Twitter4JService(twitter, configuration);
