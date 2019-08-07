@@ -4,6 +4,7 @@ package twitter_bootcamp.resources;
 import org.hibernate.validator.constraints.NotEmpty;
 import twitter4j.Status;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -29,6 +30,7 @@ public class TwitterResources {
 
     private Twitter4JService twitter4JService;
 
+    @Inject
     public TwitterResources(Twitter4JService twitter4JService) {
         this.twitter4JService = twitter4JService;
     }

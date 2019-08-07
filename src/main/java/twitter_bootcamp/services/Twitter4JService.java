@@ -14,6 +14,7 @@ import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.models.SocialUser;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public final class Twitter4JService {
 
     private Twitter4JService() {}
 
-    // for testing purposes
+    @Inject
     public Twitter4JService(Twitter twitter, AppConfiguration configuration) {
         this.twitter = twitter;
         this.configuration = configuration;
