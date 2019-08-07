@@ -11,8 +11,10 @@ import twitter4j.Twitter;
 import twitter4j.User;
 import twitter4j.TwitterException;
 import twitter_bootcamp.config.AppConfiguration;
+import twitter_bootcamp.models.SocialPost;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,7 +28,6 @@ public class Twitter4JServiceTest {
 
     ResponseList<Status> responseList;
 
-
     @Mock
     Twitter twitter;
 
@@ -38,6 +39,9 @@ public class Twitter4JServiceTest {
 
     @Mock
     AppConfiguration configuration;
+
+    @Mock
+    SocialPost socialPost;
 
     @Mock
     ResponseList<Status> mockTwitterResponseList;
@@ -58,7 +62,7 @@ public class Twitter4JServiceTest {
     }
 
     @Test
-    final void getTwitterTimeline_ReturnsResponseLisPassesOnMessageEquivalent() throws Twitter4JServiceException, TwitterException {
+    final void getTwitterTimeline_ReturnsResponseListPassesOnMessageEquivalent() throws Twitter4JServiceException, TwitterException {
         // using deprecated Date type due to twitter4j using Date type
         Date date = new Date(1, 1, 2019);
 
@@ -72,8 +76,7 @@ public class Twitter4JServiceTest {
         responseList.add(mockStatus);
 
         when(twitter.getHomeTimeline()).thenReturn(responseList);
-
-        assertEquals(responseList.get(0).getText(), twitter4JService.getTwitterTimeline().get(0).getMessage());
+        assertEquals(Optional.of(responseList).map(obj -> obj.get(0).getText()), twitter4JService.getTwitterTimeline().map(obj -> obj.get(0).getMessage()));
     }
 
     @Test
@@ -83,6 +86,23 @@ public class Twitter4JServiceTest {
         assertThrows(Twitter4JServiceException.class, () -> {
             twitter4JService.getTwitterTimeline();
         });
+    }
+
+    @Test
+    final void socialPostBuilder_ReturnsSocialPost() {
+        // using deprecated Date type due to twitter4j using Date type
+        Date date = new Date(1, 1, 2019);
+
+        when(mockStatus.getUser()).thenReturn(user);
+        when(mockStatus.getCreatedAt()).thenReturn(date);
+        when(mockStatus.getText()).thenReturn("Test SocialPost");
+        when(user.getName()).thenReturn("Test User");
+        when(user.getScreenName()).thenReturn("Test Handle");
+        when(user.getProfileImageURL()).thenReturn("Test Profile Image URL ");
+
+        when(socialPost.getMessage()).thenReturn("Test SocialPost");
+
+        assertEquals(socialPost.getMessage(), twitter4JService.socialPostBuilder(mockStatus).getMessage());
     }
 
     @Test

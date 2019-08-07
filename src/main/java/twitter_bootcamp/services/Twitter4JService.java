@@ -2,7 +2,6 @@ package twitter_bootcamp.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -14,8 +13,11 @@ import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.models.SocialUser;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 public final class Twitter4JService {
 
@@ -29,7 +31,6 @@ public final class Twitter4JService {
 
     private Twitter twitter;
 
-
     private Twitter4JService() {}
 
     // for testing purposes
@@ -38,29 +39,15 @@ public final class Twitter4JService {
         this.configuration = configuration;
     }
 
-    public List<SocialPost> getTwitterTimeline() throws Twitter4JServiceException {
+    public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
-            ResponseList<Status> twitterResponse = twitter.getHomeTimeline();
+            List<SocialPost> streamSocialPostList = twitter.getHomeTimeline()
+                    .stream()
+                    .map(this::socialPostBuilder)
+                    .collect(toList());
 
-            List<SocialPost> userList = new ArrayList<>();
-
-            for (Status status : twitterResponse) {
-                SocialPost socialPost = new SocialPost();
-                SocialUser socialUser = new SocialUser();
-
-                socialPost.setSocialUser(socialUser);
-                socialPost.setCreatedAt(status.getCreatedAt());
-                socialPost.setMessage(status.getText());
-
-                socialUser.setName(status.getUser().getName());
-                socialUser.setTwitterHandle(status.getUser().getScreenName());
-                socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
-
-                userList.add(socialPost);
-            }
-
-            return userList;
+            return Optional.of(streamSocialPostList);
         }
         catch (TwitterException e) {
             LOGGER.error("Error getting twitter timeline. ", e);
@@ -68,27 +55,56 @@ public final class Twitter4JService {
         }
     }
 
-    public Status sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
+    protected SocialPost socialPostBuilder(Status status) {
+        SocialPost socialPost = new SocialPost();
+        SocialUser socialUser = new SocialUser();
 
-        // throw exception if tweet message is too long
-        if (message.length() > MAX_TWEET_LENGTH) {
-            LOGGER.warn("User tweet message exceeded tweet max length. User tweet: {}", message);
-            throw new Twitter4JServiceException("Maximum tweet length exceeded.");
+        socialUser.setName(status.getUser().getName());
+        socialUser.setTwitterHandle(status.getUser().getScreenName());
+        socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
+
+        socialPost.setSocialUser(socialUser);
+        socialPost.setCreatedAt(status.getCreatedAt());
+        socialPost.setMessage(status.getText());
+
+
+        return socialPost;
+    }
+
+    public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException, TwitterException {
+        LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
+
+        List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
+                .stream()
+                .filter(status -> containsIgnoreCase(status.getText(), filterKey))
+                .map(this::socialPostBuilder)
+                .collect(toList());
+
+        if (timelineFiltered.isEmpty()) {
+            throw new Twitter4JServiceException("No filtered objects found");
         }
         else {
-            try {
-                Status status = twitter.updateStatus(message);
-                LOGGER.info("User: {} is tweeting: {}", status.getUser().getName(),status.getText());
+            LOGGER.info("Successfully filtered");
 
-                return status;
-            }
-            catch (TwitterException e) {
-                LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
-                throw new RuntimeException();
-            }
+            return Optional.of(timelineFiltered);
         }
     }
 
+    public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
+        try {
+            return Optional.of(twitter.updateStatus(
+                        Optional.of(message)
+                                .filter(x -> x.length() <= MAX_TWEET_LENGTH)
+                                .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded Ensure tweet is less than " + MAX_TWEET_LENGTH + " characters."))
+                        ))
+                    .map(this::socialPostBuilder);
+
+        }
+        catch (TwitterException e) {
+            LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
+            throw new RuntimeException();
+        }
+    }
 
     public Twitter getTwitter() {
         TwitterAuth twitterAuth = configuration.getTwitterAuth();
