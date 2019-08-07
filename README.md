@@ -28,7 +28,11 @@ For example, from terminal: `curl -d "message=Hello World" -X POST http://localh
 
 ### To get your Timeline:
 GET from the endpoint /api/1.0/twitter/timeline
-For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timeline;`
+For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timeline`
+
+### To filter from your Timeline:
+GET from the endpoint /api/1.0/twitter/timeline/filter with the query param of filterKey
+For example, from terminal: `curl -X GET http://localhost:8080/api/1.0/twitter/timeline/filter?filterKey=YourFilterKeyword`
 
 ## Running unit tests:
 In terminal, at the project root directory run:
