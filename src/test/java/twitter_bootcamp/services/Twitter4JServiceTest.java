@@ -12,7 +12,6 @@ import twitter4j.User;
 import twitter4j.TwitterException;
 import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.models.SocialPost;
-import twitter_bootcamp.models.SocialUser;
 
 import java.util.Date;
 import java.util.Optional;
