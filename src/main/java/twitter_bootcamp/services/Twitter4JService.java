@@ -25,7 +25,7 @@ public final class Twitter4JService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterApp.class);
 
-    protected static final int MAX_TWEET_LENGTH = 280;
+    public static final int MAX_TWEET_LENGTH = 280;
 
     private AppConfiguration configuration;
 
@@ -91,21 +91,18 @@ public final class Twitter4JService {
     }
 
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
+        try {
+            return Optional.of(twitter.updateStatus(
+                        Optional.of(message)
+                                .filter(x -> x.length() <= MAX_TWEET_LENGTH)
+                                .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded."))
+                        ))
+                    .map(this::socialPostBuilder);
 
-        // throw exception if tweet message is too long
-        if (message.length() > MAX_TWEET_LENGTH) {
-            LOGGER.warn("User tweet message exceeded tweet max length. User tweet: {}", message);
-            throw new Twitter4JServiceException("Maximum tweet length exceeded.");
         }
-        else {
-            try {
-                return Optional.of(twitter.updateStatus(message)).map(this::socialPostBuilder);
-
-            }
-            catch (TwitterException e) {
-                LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
-                throw new RuntimeException();
-            }
+        catch (TwitterException e) {
+            LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
+            throw new RuntimeException();
         }
     }
 
