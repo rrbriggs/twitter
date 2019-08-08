@@ -6,11 +6,8 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.TwitterFactory;
 import twitter_bootcamp.TwitterApp;
 import twitter_bootcamp.config.AppConfiguration;
-import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.models.SocialUser;
 

@@ -6,7 +6,6 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter_bootcamp.config.AppConfiguration;
-import twitter_bootcamp.resources.TwitterResources;
 
 
 public class TwitterApp extends Application<AppConfiguration> {
@@ -25,13 +24,12 @@ public class TwitterApp extends Application<AppConfiguration> {
 
     @Override
     public void run(final AppConfiguration configuration, final Environment environment) {
-
-        // todo: resource(service(congfig))
         ServiceComponent component = DaggerServiceComponent.builder()
+                .resourceModule(new ResourceModule())
                 .twitterModule(new TwitterModule(configuration))
                 .build();
 
         LOGGER.info("Registering REST resources..");
-        environment.jersey().register(new TwitterResources(component.getTwitter4JService()));
+        environment.jersey().register(component.getTwitterResources());
     }
 }
