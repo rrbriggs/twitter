@@ -22,7 +22,7 @@ public class TwitterModule {
 
     @Provides
     Twitter4JService provideTwitter4JService(Twitter twitter, AppConfiguration configuration) {
-        return new Twitter4JService(twitter, configuration);
+        return new Twitter4JService(twitter);
     }
 
     @Provides
