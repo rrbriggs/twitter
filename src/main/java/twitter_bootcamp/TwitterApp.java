@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.resources.TwitterResources;
-import twitter_bootcamp.services.Twitter4JService;
 
 
 public class TwitterApp extends Application<AppConfiguration> {
@@ -26,11 +25,11 @@ public class TwitterApp extends Application<AppConfiguration> {
 
     @Override
     public void run(final AppConfiguration configuration, final Environment environment) {
-
-        Twitter4JService twitter4JService = Twitter4JService.getInstance();
-        twitter4JService.setConfiguration(configuration);
+        ServiceComponent component = DaggerServiceComponent.builder()
+                .twitterModule(new TwitterModule(configuration))
+                .build();
 
         LOGGER.info("Registering REST resources..");
-        environment.jersey().register(new TwitterResources(twitter4JService));
+        environment.jersey().register(new TwitterResources(component.getTwitter4JService()));
     }
 }

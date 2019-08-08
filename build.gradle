@@ -7,6 +7,8 @@
  */
 
 plugins {
+    id 'idea'
+
     // Apply the java plugin to add support for Java
     id 'java'
 
@@ -55,15 +57,12 @@ dependencies {
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
     compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-    compile 'com.google.dagger:dagger:2.24'
-    apt 'com.google.dagger:dagger-compiler:2.24'
     testCompile group: 'io.dropwizard', name: 'dropwizard-testing', version: dropwizardVersion
-    testCompile 'com.google.dagger:dagger:2.24'
     testImplementation "org.mockito:mockito-core:2.+"
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
 
     annotationProcessor 'com.google.dagger:dagger-compiler:2.24'
-    testAnnotationProcessor "com.google.dagger:dagger-compiler:2.24"
+    implementation 'com.google.dagger:dagger:2.24'
 }
 
 test {
