@@ -107,23 +107,6 @@ public final class Twitter4JService {
         }
     }
 
-    public Twitter getTwitter() {
-        TwitterAuth twitterAuth = configuration.getTwitterAuth();
-
-        LOGGER.info("Setting twitter OAuth config: ");
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(twitterAuth.getConsumerKey())
-                .setOAuthConsumerSecret(twitterAuth.getConsumerSecretKey())
-                .setOAuthAccessToken(twitterAuth.getAccessToken())
-                .setOAuthAccessTokenSecret(twitterAuth.getAccessTokenSecret());
-
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        twitter = tf.getInstance();
-
-        return twitter;
-    }
-
     public void setTwitter(Twitter twitter) { this.twitter = twitter; }
 
     public AppConfiguration getConfiguration() {
@@ -132,8 +115,6 @@ public final class Twitter4JService {
 
     public void setConfiguration(AppConfiguration configuration) {
         this.configuration = configuration;
-
-        twitter = getTwitter();
     }
 
 
