@@ -25,7 +25,6 @@ public class TwitterApp extends Application<AppConfiguration> {
     @Override
     public void run(final AppConfiguration configuration, final Environment environment) {
         ServiceComponent component = DaggerServiceComponent.builder()
-                .resourceModule(new ResourceModule())
                 .twitterModule(new TwitterModule(configuration))
                 .build();
 

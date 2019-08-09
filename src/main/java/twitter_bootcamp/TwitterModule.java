@@ -9,7 +9,6 @@ import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.config.TwitterAuth;
-import twitter_bootcamp.services.Twitter4JService;
 
 
 @Module
@@ -18,11 +17,6 @@ public class TwitterModule {
 
     public TwitterModule(AppConfiguration configuration){
         this.configuration = configuration;
-    }
-
-    @Provides
-    Twitter4JService provideTwitter4JService(Twitter twitter) {
-        return new Twitter4JService(twitter);
     }
 
     @Provides
