@@ -83,9 +83,9 @@ public class Twitter4JServiceTest {
     final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException {
         when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
 
-        assertThrows(Twitter4JServiceException.class, () -> {
-            twitter4JService.getTwitterTimeline();
-        });
+        assertThrows(Twitter4JServiceException.class, () ->
+            twitter4JService.getTwitterTimeline()
+        );
     }
 
     @Test
@@ -119,17 +119,17 @@ public class Twitter4JServiceTest {
         char[] charArray = new char[twitter4JService.MAX_TWEET_LENGTH + 1];
         String exceedsMaxLenString = new String(charArray);
 
-        assertThrows(Twitter4JServiceException.class, () -> {
-            twitter4JService.sendTweet(exceedsMaxLenString);
-        });
+        assertThrows(Twitter4JServiceException.class, () ->
+            twitter4JService.sendTweet(exceedsMaxLenString)
+        );
     }
 
     @Test
     final void sendTweet_ErrorInUpdateStatusThrowsRuntimeError() throws TwitterException {
         when(twitter.updateStatus(anyString())).thenThrow(mockTwitterException);
 
-        assertThrows(RuntimeException.class, () -> {
-            twitter4JService.sendTweet(anyString());
-        });
+        assertThrows(RuntimeException.class, () ->
+            twitter4JService.sendTweet(anyString())
+        );
     }
 }
