@@ -7,6 +7,8 @@
  */
 
 plugins {
+    id 'idea'
+
     // Apply the java plugin to add support for Java
     id 'java'
 
@@ -15,6 +17,9 @@ plugins {
 
     // Apply the application plugin to add support for test coverage using JaCoCo
     id 'jacoco'
+
+    // Add plugin https://plugins.gradle.org/plugin/net.ltgt.apt
+    id "net.ltgt.apt" version "0.10"
 }
 
 jacocoTestReport {
@@ -55,6 +60,9 @@ dependencies {
     testCompile group: 'io.dropwizard', name: 'dropwizard-testing', version: dropwizardVersion
     testImplementation "org.mockito:mockito-core:2.+"
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
+
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.24'
+    implementation 'com.google.dagger:dagger:2.24'
 }
 
 test {

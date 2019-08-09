@@ -2,12 +2,16 @@ package twitter_bootcamp.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import javax.inject.Inject;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 
 
 public class AppConfiguration extends Configuration {
+
+    @Inject
+    public AppConfiguration() {}
 
     @NotEmpty private String appName;
 

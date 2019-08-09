@@ -1,15 +1,12 @@
 package twitter_bootcamp.services;
 
+import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.TwitterFactory;
 import twitter_bootcamp.TwitterApp;
-import twitter_bootcamp.config.AppConfiguration;
-import twitter_bootcamp.config.TwitterAuth;
 import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.models.SocialUser;
 
@@ -27,16 +24,13 @@ public final class Twitter4JService {
 
     protected static final int MAX_TWEET_LENGTH = 280;
 
-    private AppConfiguration configuration;
-
     private Twitter twitter;
 
     private Twitter4JService() {}
 
-    // for testing purposes
-    public Twitter4JService(Twitter twitter, AppConfiguration configuration) {
+    @Inject
+    public Twitter4JService(Twitter twitter) {
         this.twitter = twitter;
-        this.configuration = configuration;
     }
 
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
@@ -66,7 +60,6 @@ public final class Twitter4JService {
         socialPost.setSocialUser(socialUser);
         socialPost.setCreatedAt(status.getCreatedAt());
         socialPost.setMessage(status.getText());
-
 
         return socialPost;
     }
@@ -98,43 +91,12 @@ public final class Twitter4JService {
                                 .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded Ensure tweet is less than " + MAX_TWEET_LENGTH + " characters."))
                         ))
                     .map(this::socialPostBuilder);
-
         }
         catch (TwitterException e) {
             LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
             throw new RuntimeException();
         }
     }
-
-    public Twitter getTwitter() {
-        TwitterAuth twitterAuth = configuration.getTwitterAuth();
-
-        LOGGER.info("Setting twitter OAuth config: ");
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(twitterAuth.getConsumerKey())
-                .setOAuthConsumerSecret(twitterAuth.getConsumerSecretKey())
-                .setOAuthAccessToken(twitterAuth.getAccessToken())
-                .setOAuthAccessTokenSecret(twitterAuth.getAccessTokenSecret());
-
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        twitter = tf.getInstance();
-
-        return twitter;
-    }
-
-    public void setTwitter(Twitter twitter) { this.twitter = twitter; }
-
-    public AppConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    public void setConfiguration(AppConfiguration configuration) {
-        this.configuration = configuration;
-
-        twitter = getTwitter();
-    }
-
 
     public static Twitter4JService getInstance() {
         return INSTANCE;

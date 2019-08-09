@@ -56,7 +56,7 @@ public class Twitter4JServiceTest {
 
         responseList = new CustomResponseList<>();
 
-        twitter4JService = new Twitter4JService(twitter, configuration);
+        twitter4JService = new Twitter4JService(twitter);
 
         mockTwitterResponseList.add(mockStatus);
     }
