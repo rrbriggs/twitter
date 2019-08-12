@@ -26,22 +26,34 @@ public final class Twitter4JService {
 
     private Twitter twitter;
 
+    private SocialPostListCache socialPostListCache;
+
     private Twitter4JService() {}
 
     @Inject
     public Twitter4JService(Twitter twitter) {
         this.twitter = twitter;
+        this.socialPostListCache = new SocialPostListCache();
     }
 
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
-            List<SocialPost> streamSocialPostList = twitter.getHomeTimeline()
+
+            socialPostListCache.setSocialPosts(twitter.getHomeTimeline()
                     .stream()
                     .map(this::socialPostBuilder)
-                    .collect(toList());
+                    .collect(toList()));
 
-            return Optional.of(streamSocialPostList);
+            // todo: remove this junk once everything is working
+//            socialPostListCache.getSocialPosts().forEach(item -> System.out.println(item.getMessage()));
+
+//            List<SocialPost> streamSocialPostList = twitter.getHomeTimeline()
+//                    .stream()
+//                    .map(this::socialPostBuilder)
+//                    .collect(toList());
+
+            return Optional.of(socialPostListCache.getSocialPosts());
         }
         catch (TwitterException e) {
             LOGGER.error("Error getting twitter timeline. ", e);
@@ -85,6 +97,9 @@ public final class Twitter4JService {
 
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
         try {
+            // clear cache, it will be old after this update
+            socialPostListCache.getSocialPosts().clear();
+
             return Optional.of(twitter.updateStatus(
                         Optional.of(message)
                                 .filter(x -> x.length() <= MAX_TWEET_LENGTH)
