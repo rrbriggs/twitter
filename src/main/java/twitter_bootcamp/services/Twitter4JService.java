@@ -45,14 +45,6 @@ public final class Twitter4JService {
                     .map(this::socialPostBuilder)
                     .collect(toList()));
 
-            // todo: remove this junk once everything is working
-//            socialPostListCache.getSocialPosts().forEach(item -> System.out.println(item.getMessage()));
-
-//            List<SocialPost> streamSocialPostList = twitter.getHomeTimeline()
-//                    .stream()
-//                    .map(this::socialPostBuilder)
-//                    .collect(toList());
-
             return Optional.of(socialPostListCache.getSocialPosts());
         }
         catch (TwitterException e) {
