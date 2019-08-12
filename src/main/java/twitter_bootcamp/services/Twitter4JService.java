@@ -105,6 +105,14 @@ public final class Twitter4JService {
         }
     }
 
+    public void setSocialPostListCache(SocialPostListCache socialPostListCache) {
+        this.socialPostListCache = socialPostListCache;
+    }
+
+    public SocialPostListCache getSocialPostListCache() {
+        return socialPostListCache;
+    }
+
     public static Twitter4JService getInstance() {
         return INSTANCE;
     }
