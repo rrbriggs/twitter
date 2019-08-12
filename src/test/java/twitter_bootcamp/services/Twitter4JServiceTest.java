@@ -10,7 +10,6 @@ import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.User;
 import twitter4j.TwitterException;
-import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.models.SocialPost;
 
 import java.util.Date;
