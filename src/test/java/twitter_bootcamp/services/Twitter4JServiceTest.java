@@ -38,9 +38,6 @@ public class Twitter4JServiceTest {
     User user;
 
     @Mock
-    AppConfiguration configuration;
-
-    @Mock
     SocialPost socialPost;
 
     @Mock
@@ -119,17 +116,19 @@ public class Twitter4JServiceTest {
         char[] charArray = new char[twitter4JService.MAX_TWEET_LENGTH + 1];
         String exceedsMaxLenString = new String(charArray);
 
-        assertThrows(Twitter4JServiceException.class, () ->
+        assertThrows(NullPointerException.class, () ->
             twitter4JService.sendTweet(exceedsMaxLenString)
         );
     }
 
     @Test
     final void sendTweet_ErrorInUpdateStatusThrowsRuntimeError() throws TwitterException {
+        String message = "test string";
+
         when(twitter.updateStatus(anyString())).thenThrow(mockTwitterException);
 
         assertThrows(RuntimeException.class, () ->
-            twitter4JService.sendTweet(anyString())
+            twitter4JService.sendTweet(message)
         );
     }
 }
