@@ -71,20 +71,29 @@ public final class Twitter4JService {
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException, TwitterException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
-        List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
-                .stream()
-                .filter(status -> containsIgnoreCase(status.getText(), filterKey))
-                .map(this::socialPostBuilder)
-                .collect(toList());
+        if (socialPostListCache.getSocialPosts() == null){
+            List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
+                    .stream()
+                    .filter(status -> containsIgnoreCase(status.getText(), filterKey))
+                    .map(this::socialPostBuilder)
+                    .collect(toList());
+            if (timelineFiltered.isEmpty()) {
+                throw new Twitter4JServiceException("No filtered objects found");
+            }
+            else {
+                LOGGER.info("Successfully filtered");
 
-        if (timelineFiltered.isEmpty()) {
-            throw new Twitter4JServiceException("No filtered objects found");
+                return Optional.of(timelineFiltered);
+            }
         }
         else {
-            LOGGER.info("Successfully filtered");
-
-            return Optional.of(timelineFiltered);
+            return Optional.of(socialPostListCache.getSocialPosts()
+                    .stream()
+                    .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
+                    .collect(toList())
+            );
         }
+
     }
 
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
