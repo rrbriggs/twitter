@@ -26,14 +26,14 @@ public final class Twitter4JService {
 
     private Twitter twitter;
 
-    private SocialPostListCache socialPostListCache;
+    private ListCache<SocialPost> listCache;
 
     private Twitter4JService() {}
 
     @Inject
     public Twitter4JService(Twitter twitter) {
         this.twitter = twitter;
-        this.socialPostListCache = new SocialPostListCache();
+        this.listCache = new ListCache();
     }
 
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
@@ -44,7 +44,7 @@ public final class Twitter4JService {
                     .map(this::socialPostBuilder)
                     .collect(toList());
 
-            socialPostListCache.setSocialPosts(socialPostList);
+            listCache.setSocialPosts(socialPostList);
 
             return Optional.of(socialPostList);
         }
@@ -72,7 +72,7 @@ public final class Twitter4JService {
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException, TwitterException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
-        if (socialPostListCache.getSocialPosts() == null){
+        if (listCache.getSocialPosts() == null){
             List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
                     .stream()
                     .filter(status -> containsIgnoreCase(status.getText(), filterKey))
@@ -88,18 +88,17 @@ public final class Twitter4JService {
             }
         }
         else {
-            return Optional.of(socialPostListCache.getSocialPosts()
+            return Optional.of(listCache.getSocialPosts()
                     .stream()
                     .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
-                    .collect(toList())
-            );
+                    .collect(toList()));
         }
     }
 
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
         try {
             // clear cache, it will be old after this update
-            socialPostListCache.getSocialPosts().clear();
+            listCache.getSocialPosts().clear();
 
             return Optional.of(twitter.updateStatus(
                         Optional.of(message)
@@ -114,12 +113,12 @@ public final class Twitter4JService {
         }
     }
 
-    public void setSocialPostListCache(SocialPostListCache socialPostListCache) {
-        this.socialPostListCache = socialPostListCache;
+    public void setListCache(ListCache listCache) {
+        this.listCache = listCache;
     }
 
-    public SocialPostListCache getSocialPostListCache() {
-        return socialPostListCache;
+    public ListCache getListCache() {
+        return listCache;
     }
 
     public static Twitter4JService getInstance() {
