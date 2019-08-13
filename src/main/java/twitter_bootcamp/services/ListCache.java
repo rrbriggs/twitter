@@ -1,16 +1,17 @@
 package twitter_bootcamp.services;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class ListCache<T> {
-    private List<T> socialPosts;
+    private Optional<List<T>> socialPosts;
 
-    public List<T> getSocialPosts() {
+    public Optional<List<T>> getSocialPosts() {
         return socialPosts;
     }
 
-    public void setSocialPosts(List<T> socialPosts) {
+    public void setSocialPosts(Optional<List<T>> socialPosts) {
         this.socialPosts = socialPosts;
     }
 }
