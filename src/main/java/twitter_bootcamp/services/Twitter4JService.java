@@ -39,13 +39,14 @@ public final class Twitter4JService {
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
-
-            socialPostListCache.setSocialPosts(twitter.getHomeTimeline()
+            List<SocialPost> socialPostList = twitter.getHomeTimeline()
                     .stream()
                     .map(this::socialPostBuilder)
-                    .collect(toList()));
+                    .collect(toList());
 
-            return Optional.of(socialPostListCache.getSocialPosts());
+            socialPostListCache.setSocialPosts(socialPostList);
+
+            return Optional.of(socialPostList);
         }
         catch (TwitterException e) {
             LOGGER.error("Error getting twitter timeline. ", e);
@@ -93,7 +94,6 @@ public final class Twitter4JService {
                     .collect(toList())
             );
         }
-
     }
 
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
