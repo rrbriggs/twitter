@@ -77,7 +77,7 @@ public final class Twitter4JService {
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
         try {
             // clear cache, it will be old after this update
-            listCache.getCache().clear();
+            listCache.setCache(null);
 
             return Optional.of(twitter.updateStatus(
                         Optional.of(message)
