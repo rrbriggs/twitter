@@ -4,13 +4,13 @@ import java.util.List;
 
 
 public class ListCache<T> {
-    private List<T> socialPosts;
+    private List<T> cache;
 
-    public List<T> getSocialPosts() {
-        return socialPosts;
+    public List<T> getCache() {
+        return cache;
     }
 
-    public void setSocialPosts(List<T> socialPosts) {
-        this.socialPosts = socialPosts;
+    public void setCache(List<T> cache) {
+        this.cache = cache;
     }
 }
