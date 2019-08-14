@@ -126,14 +126,6 @@ public final class Twitter4JService {
         return socialPost;
     }
 
-    public void setListCache(ListCache listCache) {
-        this.listCache = listCache;
-    }
-
-    public ListCache getListCache() {
-        return listCache;
-    }
-
     public static Twitter4JService getInstance() {
         return INSTANCE;
     }
