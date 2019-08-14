@@ -39,12 +39,7 @@ public final class Twitter4JService {
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
         try {
-            List<SocialPost> socialPostList = twitter.getHomeTimeline()
-                    .stream()
-                    .map(this::socialPostBuilder)
-                    .collect(toList());
-
-            listCache.setSocialPosts(socialPostList);
+            List<SocialPost> socialPostList = cacheHomeTimeline();
 
             return Optional.of(socialPostList);
         }
@@ -69,30 +64,34 @@ public final class Twitter4JService {
         return socialPost;
     }
 
-    public Optional<List<SocialPost>> filterTimeline(String filterKey) throws Twitter4JServiceException, TwitterException {
+    public Optional<List<SocialPost>> filterTimeline(String filterKey) throws TwitterException, Twitter4JServiceException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
         if (listCache.getSocialPosts() == null){
-            List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
-                    .stream()
-                    .filter(status -> containsIgnoreCase(status.getText(), filterKey))
-                    .map(this::socialPostBuilder)
-                    .collect(toList());
-            if (timelineFiltered.isEmpty()) {
-                throw new Twitter4JServiceException("No filtered objects found");
-            }
-            else {
-                LOGGER.info("Successfully filtered");
+            cacheHomeTimeline();
+        }
 
-                return Optional.of(timelineFiltered);
-            }
+        Optional<List<SocialPost>> filteredTimeline = Optional.of(listCache.getSocialPosts()
+                .stream()
+                .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
+                .collect(toList()));
+
+        if (filteredTimeline.get().isEmpty()) {
+            throw new Twitter4JServiceException("");
         }
-        else {
-            return Optional.of(listCache.getSocialPosts()
-                    .stream()
-                    .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
-                    .collect(toList()));
-        }
+
+        return filteredTimeline;
+    }
+
+    private List<SocialPost> cacheHomeTimeline() throws TwitterException {
+        List<SocialPost> socialPostList = twitter.getHomeTimeline()
+                .stream()
+                .map(this::socialPostBuilder)
+                .collect(toList());
+
+                listCache.setSocialPosts(socialPostList);
+
+                return socialPostList;
     }
 
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
