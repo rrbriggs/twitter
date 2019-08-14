@@ -10,7 +10,6 @@ import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.User;
 import twitter4j.TwitterException;
-import twitter_bootcamp.config.AppConfiguration;
 import twitter_bootcamp.models.SocialPost;
 
 import java.util.Date;
@@ -36,9 +35,6 @@ public class Twitter4JServiceTest {
 
     @Mock
     User user;
-
-    @Mock
-    AppConfiguration configuration;
 
     @Mock
     SocialPost socialPost;
@@ -83,9 +79,9 @@ public class Twitter4JServiceTest {
     final void getTwitterTimeline_ThrowsTwitterException() throws TwitterException {
         when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
 
-        assertThrows(Twitter4JServiceException.class, () -> {
-            twitter4JService.getTwitterTimeline();
-        });
+        assertThrows(Twitter4JServiceException.class, () ->
+            twitter4JService.getTwitterTimeline()
+        );
     }
 
     @Test
@@ -119,17 +115,19 @@ public class Twitter4JServiceTest {
         char[] charArray = new char[twitter4JService.MAX_TWEET_LENGTH + 1];
         String exceedsMaxLenString = new String(charArray);
 
-        assertThrows(Twitter4JServiceException.class, () -> {
-            twitter4JService.sendTweet(exceedsMaxLenString);
-        });
+        assertThrows(NullPointerException.class, () ->
+            twitter4JService.sendTweet(exceedsMaxLenString)
+        );
     }
 
     @Test
     final void sendTweet_ErrorInUpdateStatusThrowsRuntimeError() throws TwitterException {
+        String message = "test string";
+
         when(twitter.updateStatus(anyString())).thenThrow(mockTwitterException);
 
-        assertThrows(RuntimeException.class, () -> {
-            twitter4JService.sendTweet(anyString());
-        });
+        assertThrows(RuntimeException.class, () ->
+            twitter4JService.sendTweet(message)
+        );
     }
 }
