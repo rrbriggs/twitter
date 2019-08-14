@@ -49,21 +49,6 @@ public final class Twitter4JService {
         }
     }
 
-    protected SocialPost socialPostBuilder(Status status) {
-        SocialPost socialPost = new SocialPost();
-        SocialUser socialUser = new SocialUser();
-
-        socialUser.setName(status.getUser().getName());
-        socialUser.setTwitterHandle(status.getUser().getScreenName());
-        socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
-
-        socialPost.setSocialUser(socialUser);
-        socialPost.setCreatedAt(status.getCreatedAt());
-        socialPost.setMessage(status.getText());
-
-        return socialPost;
-    }
-
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws TwitterException, Twitter4JServiceException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
@@ -83,17 +68,6 @@ public final class Twitter4JService {
         return filteredTimeline;
     }
 
-    private List<SocialPost> cacheHomeTimeline() throws TwitterException {
-        List<SocialPost> socialPostList = twitter.getHomeTimeline()
-                .stream()
-                .map(this::socialPostBuilder)
-                .collect(toList());
-
-                listCache.setSocialPosts(socialPostList);
-
-                return socialPostList;
-    }
-
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
         try {
             // clear cache, it will be old after this update
@@ -110,6 +84,32 @@ public final class Twitter4JService {
             LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
             throw new RuntimeException();
         }
+    }
+
+    private List<SocialPost> cacheHomeTimeline() throws TwitterException {
+        List<SocialPost> socialPostList = twitter.getHomeTimeline()
+                .stream()
+                .map(this::socialPostBuilder)
+                .collect(toList());
+
+        listCache.setSocialPosts(socialPostList);
+
+        return socialPostList;
+    }
+
+    protected SocialPost socialPostBuilder(Status status) {
+        SocialPost socialPost = new SocialPost();
+        SocialUser socialUser = new SocialUser();
+
+        socialUser.setName(status.getUser().getName());
+        socialUser.setTwitterHandle(status.getUser().getScreenName());
+        socialUser.setProfileImageUrl(status.getUser().getProfileImageURL());
+
+        socialPost.setSocialUser(socialUser);
+        socialPost.setCreatedAt(status.getCreatedAt());
+        socialPost.setMessage(status.getText());
+
+        return socialPost;
     }
 
     public void setListCache(ListCache listCache) {
