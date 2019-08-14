@@ -38,25 +38,31 @@ public final class Twitter4JService {
 
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
-        try {
-            List<SocialPost> socialPostList = cacheHomeTimeline();
 
-            return Optional.of(socialPostList);
+        if (listCache.getCache() == null) {
+            try {
+                List<SocialPost> socialPostList = cacheHomeTimeline();
+
+                return Optional.of(socialPostList);
+            }
+            catch (TwitterException e) {
+                LOGGER.error("Error getting twitter timeline. ", e);
+                throw new Twitter4JServiceException();
+            }
         }
-        catch (TwitterException e) {
-            LOGGER.error("Error getting twitter timeline. ", e);
-            throw new Twitter4JServiceException();
+        else {
+            return Optional.of(listCache.getCache());
         }
     }
 
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws TwitterException, Twitter4JServiceException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
-        if (listCache.getSocialPosts() == null){
+        if (listCache.getCache() == null){
             cacheHomeTimeline();
         }
 
-        Optional<List<SocialPost>> filteredTimeline = Optional.of(listCache.getSocialPosts()
+        Optional<List<SocialPost>> filteredTimeline = Optional.of(listCache.getCache()
                 .stream()
                 .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
                 .collect(toList()));
@@ -71,7 +77,7 @@ public final class Twitter4JService {
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
         try {
             // clear cache, it will be old after this update
-            listCache.getSocialPosts().clear();
+            listCache.getCache().clear();
 
             return Optional.of(twitter.updateStatus(
                         Optional.of(message)
@@ -92,7 +98,7 @@ public final class Twitter4JService {
                 .map(this::socialPostBuilder)
                 .collect(toList());
 
-        listCache.setSocialPosts(socialPostList);
+        listCache.setCache(socialPostList);
 
         return socialPostList;
     }
