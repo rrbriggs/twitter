@@ -83,15 +83,16 @@ public final class Twitter4JService {
 
     public Optional<SocialPost> sendTweet(String message) throws Twitter4JServiceException, RuntimeException {
         try {
-            // clear cache, it will be old after this update
-            listCache.setCache(null);
-
             return Optional.of(twitter.updateStatus(
                         Optional.of(message)
                                 .filter(x -> x.length() <= MAX_TWEET_LENGTH)
-                                .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded Ensure tweet is less than " + MAX_TWEET_LENGTH + " characters."))
+                                .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded ensure tweet is less than " + MAX_TWEET_LENGTH + " characters."))
                         ))
-                    .map(this::socialPostBuilder);
+                    .map(status -> {
+                        listCache.setCache(null);
+                        return socialPostBuilder(status);
+
+                    });
         }
         catch (TwitterException e) {
             LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
