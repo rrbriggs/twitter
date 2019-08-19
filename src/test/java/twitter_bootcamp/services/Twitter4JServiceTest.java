@@ -115,7 +115,7 @@ public class Twitter4JServiceTest {
         char[] charArray = new char[twitter4JService.MAX_TWEET_LENGTH + 1];
         String exceedsMaxLenString = new String(charArray);
 
-        assertThrows(NullPointerException.class, () ->
+        assertThrows(Twitter4JServiceException.class, () ->
             twitter4JService.sendTweet(exceedsMaxLenString)
         );
     }
