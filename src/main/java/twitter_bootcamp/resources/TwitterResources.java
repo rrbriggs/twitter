@@ -68,7 +68,7 @@ public class TwitterResources {
 
             return twitter4JService.filterTimeline(filterKey)
                     .map(filteredPost -> Response.ok(filteredPost)
-                    .build())
+                            .build())
                     .get();
         }
         catch (Twitter4JServiceException e) {
