@@ -6,11 +6,11 @@ public class SocialPost {
     private String message;
     private Date createdAt;
     private SocialUser user;
-    private long postID;
+    private String postID;
 
-    public long getPostID() { return postID; }
+    public String getPostID() { return postID; }
 
-    public void setPostID(long postURL) { this.postID = postURL; }
+    public void setPostID(String postURL) { this.postID = postURL; }
 
     public SocialUser getSocialUser() { return user; }
 

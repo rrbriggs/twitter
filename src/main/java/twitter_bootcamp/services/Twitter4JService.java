@@ -122,7 +122,7 @@ public final class Twitter4JService {
         socialPost.setSocialUser(socialUser);
         socialPost.setCreatedAt(status.getCreatedAt());
         socialPost.setMessage(status.getText());
-        socialPost.setPostID(status.getId());
+        socialPost.setPostID(Long.toString(status.getId()));
 
         return socialPost;
     }
