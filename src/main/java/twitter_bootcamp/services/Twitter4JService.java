@@ -26,22 +26,23 @@ public final class Twitter4JService {
 
     private Twitter twitter;
 
-    private ListCache<SocialPost> listCache;
+    private Cache<SocialPost> cache;
 
     private Twitter4JService() {}
 
     @Inject
     public Twitter4JService(Twitter twitter) {
         this.twitter = twitter;
-        this.listCache = new ListCache();
+        cache = new Cache<>();
+        cache.InitializeCache();
     }
 
-    public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
+    public Optional<List<SocialPost>> getTwitterTimeline(String timelineType) throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
 
-        if (listCache.getCache() == null) {
+        if (cache.getCache(timelineType) == null) {
             try {
-                List<SocialPost> socialPostList = cacheHomeTimeline();
+                List<SocialPost> socialPostList = cacheTimeline(timelineType);
 
                 return Optional.of(socialPostList);
             }
@@ -51,14 +52,14 @@ public final class Twitter4JService {
             }
         }
         else {
-            return Optional.of(listCache.getCache());
+            return Optional.of(cache.getCache(timelineType));
         }
     }
 
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws TwitterException, Twitter4JServiceException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
-        if (listCache.getCache() == null){
+        if (cache.getCache("home") == null){
             List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
                     .stream()
                     .filter(status -> containsIgnoreCase(status.getText(), filterKey))
@@ -74,7 +75,7 @@ public final class Twitter4JService {
             }
         }
         else {
-            return Optional.of(listCache.getCache()
+            return Optional.of(cache.getCache("home")
                     .stream()
                     .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
                     .collect(toList()));
@@ -89,7 +90,7 @@ public final class Twitter4JService {
                                 .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded ensure tweet is less than " + MAX_TWEET_LENGTH + " characters."))
                         ))
                     .map(status -> {
-                        listCache.setCache(null);
+                        cache.clearCache();
                         return socialPostBuilder(status);
 
                     });
@@ -100,13 +101,13 @@ public final class Twitter4JService {
         }
     }
 
-    private List<SocialPost> cacheHomeTimeline() throws TwitterException {
+    private List<SocialPost> cacheTimeline(String key) throws TwitterException {
         List<SocialPost> socialPostList = twitter.getHomeTimeline()
                 .stream()
                 .map(this::socialPostBuilder)
                 .collect(toList());
 
-        listCache.setCache(socialPostList);
+        cache.setCache(key, socialPostList);
 
         return socialPostList;
     }
