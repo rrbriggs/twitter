@@ -35,14 +35,16 @@ public class TwitterResources {
 
     @GET
     @Path("/timeline")
-    public Response getTimeline() {
+    public Response getTimeline(@QueryParam("userTimeline") String userTimeline) {
 
         LOGGER.info("GET request to get twitter timeline. ");
+
+        String timelineType = (userTimeline == null) ? "home" : "user";
 
         try {
             LOGGER.info("Timeline received successfully.");
 
-            return twitter4JService.getTwitterTimeline("home")
+            return twitter4JService.getTwitterTimeline(timelineType)
                     .map(socialPost -> Response.ok(socialPost)
                     .build())
                     .get();
