@@ -94,8 +94,7 @@ public final class Twitter4JService {
                         return socialPostBuilder(status);
 
                     });
-        }
-        catch (TwitterException e) {
+        } catch (TwitterException e) {
             LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
             throw new RuntimeException();
         }
