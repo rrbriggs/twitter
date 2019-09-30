@@ -102,14 +102,25 @@ public final class Twitter4JService {
     }
 
     private List<SocialPost> cacheTimeline(String key) throws TwitterException {
-        List<SocialPost> socialPostList = twitter.getHomeTimeline()
-                .stream()
-                .map(this::socialPostBuilder)
-                .collect(toList());
+        if (key == "home") {
+            List<SocialPost> socialPostList = twitter.getHomeTimeline()
+                    .stream()
+                    .map(this::socialPostBuilder)
+                    .collect(toList());
 
-        cache.setCache(key, socialPostList);
+            cache.setCache(key, socialPostList);
 
-        return socialPostList;
+            return socialPostList;
+        } else {
+            List<SocialPost> socialPostList = twitter.getUserTimeline()
+                    .stream()
+                    .map(this::socialPostBuilder)
+                    .collect(toList());
+
+            cache.setCache(key, socialPostList);
+
+            return socialPostList;
+        }
     }
 
     protected SocialPost socialPostBuilder(Status status) {
