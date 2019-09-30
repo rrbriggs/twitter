@@ -35,18 +35,41 @@ public class TwitterResources {
 
     @GET
     @Path("/timeline")
-    public Response getTimeline(@QueryParam("userTimeline") String userTimeline) {
+    public Response getTimeline() {
 
         LOGGER.info("GET request to get twitter timeline. ");
-
-        String timelineType = (userTimeline == null) ? "home" : "user";
 
         try {
             LOGGER.info("Timeline received successfully.");
 
-            return twitter4JService.getTwitterTimeline(timelineType)
+            return twitter4JService.getTwitterTimeline("home")
                     .map(socialPost -> Response.ok(socialPost)
                     .build())
+                    .get();
+
+        }
+        catch (Exception e) {
+            LOGGER.error("Twitter Exception thrown while attempting to getTimeline()", e);
+
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("There was an error getting your timeline. Please try again in a few minutes.")
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/userTimeline")
+    public Response getUserTimeline() {
+
+        LOGGER.info("GET request to get twitter timeline. ");
+
+        try {
+            LOGGER.info("Timeline received successfully.");
+
+            return twitter4JService.getTwitterTimeline("user")
+                    .map(socialPost -> Response.ok(socialPost)
+                            .build())
                     .get();
 
         }
