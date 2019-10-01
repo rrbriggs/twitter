@@ -85,6 +85,33 @@ public class Twitter4JServiceTest {
     }
 
     @Test
+    final void getTwitterUserTimeline_ReturnsResponseListPassesOnMessageEquivalent() throws Twitter4JServiceException, TwitterException {
+        // using deprecated Date type due to twitter4j using Date type
+        Date date = new Date(1, 1, 2019);
+
+        when(mockStatus.getUser()).thenReturn(user);
+        when(mockStatus.getCreatedAt()).thenReturn(date);
+        when(mockStatus.getText()).thenReturn("Test SocialPost");
+        when(user.getName()).thenReturn("Test User");
+        when(user.getScreenName()).thenReturn("Test Handle");
+        when(user.getProfileImageURL()).thenReturn("Test Profile Image URL ");
+
+        responseList.add(mockStatus);
+
+        when(twitter.getUserTimeline()).thenReturn(responseList);
+        assertEquals(Optional.of(responseList).map(obj -> obj.get(0).getText()), twitter4JService.getTwitterUserTimeline().map(obj -> obj.get(0).getMessage()));
+    }
+
+    @Test
+    final void getTwitterUserTimeline_ThrowsTwitterException() throws TwitterException {
+        when(twitter.getUserTimeline()).thenThrow(mockTwitterException);
+
+        assertThrows(Twitter4JServiceException.class, () ->
+                twitter4JService.getTwitterUserTimeline()
+        );
+    }
+
+    @Test
     final void socialPostBuilder_ReturnsSocialPost() {
         // using deprecated Date type due to twitter4j using Date type
         Date date = new Date(1, 1, 2019);

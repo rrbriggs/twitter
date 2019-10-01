@@ -79,6 +79,27 @@ public class TwitterResourcesTest {
     }
 
     @Test
+    final void getUserTimeline_ResponseMatchesStatus() throws Exception {
+        when(twitter4JService.getTwitterUserTimeline()).thenReturn(Optional.of(socialPostList));
+        Response response = twitterResources.getUserTimeline();
+
+        // test response data is what is expected
+        assertEquals(socialPostList, response.getEntity());
+        // test status code is what is expected
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    final void getUserTimeline_Twitter4JServiceExceptionThrownResponseStatusIsInternalServerError() throws Exception {
+
+        when(twitter4JService.getTwitterUserTimeline()).thenThrow(twitter4JServiceException);
+
+        Response response = twitterResources.getUserTimeline();
+
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     final void postTweet_ResponseMatchesStatus() throws Exception {
         String message = "Testing testPostTweet";
 

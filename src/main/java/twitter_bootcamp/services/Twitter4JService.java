@@ -26,22 +26,23 @@ public final class Twitter4JService {
 
     private Twitter twitter;
 
-    private ListCache<SocialPost> listCache;
+    private Cache<SocialPost> cache;
 
     private Twitter4JService() {}
 
     @Inject
     public Twitter4JService(Twitter twitter) {
         this.twitter = twitter;
-        this.listCache = new ListCache();
+        cache = new Cache<>();
+        cache.InitializeCache();
     }
 
     public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
 
-        if (listCache.getCache() == null) {
+        if (cache.getCache("home") == null) {
             try {
-                List<SocialPost> socialPostList = cacheHomeTimeline();
+                List<SocialPost> socialPostList = cacheTimeline("home");
 
                 return Optional.of(socialPostList);
             }
@@ -51,14 +52,33 @@ public final class Twitter4JService {
             }
         }
         else {
-            return Optional.of(listCache.getCache());
+            return Optional.of(cache.getCache("home"));
+        }
+    }
+
+    public Optional<List<SocialPost>> getTwitterUserTimeline() throws Twitter4JServiceException {
+        LOGGER.info("Getting Timeline.. ");
+
+        if (cache.getCache("user") == null) {
+            try {
+                List<SocialPost> socialPostList = cacheTimeline("user");
+
+                return Optional.of(socialPostList);
+            }
+            catch (TwitterException e) {
+                LOGGER.error("Error getting twitter timeline. ", e);
+                throw new Twitter4JServiceException();
+            }
+        }
+        else {
+            return Optional.of(cache.getCache("user"));
         }
     }
 
     public Optional<List<SocialPost>> filterTimeline(String filterKey) throws TwitterException, Twitter4JServiceException {
         LOGGER.info("Filtering from Timeline using filterKey of {}", filterKey);
 
-        if (listCache.getCache() == null){
+        if (cache.getCache("home") == null){
             List<SocialPost> timelineFiltered = twitter.getHomeTimeline()
                     .stream()
                     .filter(status -> containsIgnoreCase(status.getText(), filterKey))
@@ -74,7 +94,7 @@ public final class Twitter4JService {
             }
         }
         else {
-            return Optional.of(listCache.getCache()
+            return Optional.of(cache.getCache("home")
                     .stream()
                     .filter(status -> containsIgnoreCase(status.getMessage(), filterKey))
                     .collect(toList()));
@@ -89,26 +109,36 @@ public final class Twitter4JService {
                                 .orElseThrow(() -> new Twitter4JServiceException("Maximum tweet length exceeded ensure tweet is less than " + MAX_TWEET_LENGTH + " characters."))
                         ))
                     .map(status -> {
-                        listCache.setCache(null);
+                        cache.clearCache();
                         return socialPostBuilder(status);
 
                     });
-        }
-        catch (TwitterException e) {
+        } catch (TwitterException e) {
             LOGGER.error("Unexpected error when calling twitter.updateStatus with the message of: {}", message, e);
             throw new RuntimeException();
         }
     }
 
-    private List<SocialPost> cacheHomeTimeline() throws TwitterException {
-        List<SocialPost> socialPostList = twitter.getHomeTimeline()
-                .stream()
-                .map(this::socialPostBuilder)
-                .collect(toList());
+    private List<SocialPost> cacheTimeline(String key) throws TwitterException {
+        if (key == "home") {
+            List<SocialPost> socialPostList = twitter.getHomeTimeline()
+                    .stream()
+                    .map(this::socialPostBuilder)
+                    .collect(toList());
 
-        listCache.setCache(socialPostList);
+            cache.setCache(key, socialPostList);
 
-        return socialPostList;
+            return socialPostList;
+        } else {
+            List<SocialPost> socialPostList = twitter.getUserTimeline()
+                    .stream()
+                    .map(this::socialPostBuilder)
+                    .collect(toList());
+
+            cache.setCache(key, socialPostList);
+
+            return socialPostList;
+        }
     }
 
     protected SocialPost socialPostBuilder(Status status) {

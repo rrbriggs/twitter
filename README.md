@@ -6,7 +6,7 @@ This application has the basic functionality of:
 
 ## Building and running with Gradle:
 
-Clone the repo with `git clone --single-branch --branch add-SocialPostUrl https://github.com/rrbriggs/BrigBot.git`
+Clone the repo with `git clone --single-branch --branch user-timeline https://github.com/rrbriggs/BrigBot.git`
 
 *This application requires an app_config.yml file that contains your Twitter tokens and keys.
 There an example file called (app_config-example.yml) that lives in the config folder of this project.
@@ -26,9 +26,12 @@ To run the app, then enter:
 POST plain text / string to the endpoint /api/1.0/twitter/tweet/message
 For example, from terminal: `curl -d "message=Hello World" -X POST http://localhost:8080/api/1.0/twitter/tweet`
 
-### To get your Timeline:
+### To get your Home Timeline:
 GET from the endpoint /api/1.0/twitter/timeline
 For example, from terminal: `curl  http://localhost:8080/api/1.0/twitter/timeline`
+
+### To get your User Timeline:
+GET from the endpoint(with included param): /api/1.0/twitter/timeline?timeline?userTimeline=user
 
 ### To filter from your Timeline:
 GET from the endpoint /api/1.0/twitter/timeline/filter with the query param of filterKey
