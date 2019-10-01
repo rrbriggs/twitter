@@ -72,7 +72,7 @@ public class Twitter4JServiceTest {
         responseList.add(mockStatus);
 
         when(twitter.getHomeTimeline()).thenReturn(responseList);
-        assertEquals(Optional.of(responseList).map(obj -> obj.get(0).getText()), twitter4JService.getTwitterTimeline().map(obj -> obj.get(0).getMessage()));
+        assertEquals(Optional.of(responseList).map(obj -> obj.get(0).getText()), twitter4JService.getTwitterTimeline("home").map(obj -> obj.get(0).getMessage()));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class Twitter4JServiceTest {
         when(twitter.getHomeTimeline()).thenThrow(mockTwitterException);
 
         assertThrows(Twitter4JServiceException.class, () ->
-            twitter4JService.getTwitterTimeline()
+            twitter4JService.getTwitterTimeline("home")
         );
     }
 
