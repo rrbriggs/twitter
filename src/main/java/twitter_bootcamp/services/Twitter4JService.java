@@ -37,12 +37,12 @@ public final class Twitter4JService {
         cache.InitializeCache();
     }
 
-    public Optional<List<SocialPost>> getTwitterTimeline(String timelineType) throws Twitter4JServiceException {
+    public Optional<List<SocialPost>> getTwitterTimeline() throws Twitter4JServiceException {
         LOGGER.info("Getting Timeline.. ");
 
-        if (cache.getCache(timelineType) == null) {
+        if (cache.getCache("home") == null) {
             try {
-                List<SocialPost> socialPostList = cacheTimeline(timelineType);
+                List<SocialPost> socialPostList = cacheTimeline("home");
 
                 return Optional.of(socialPostList);
             }
@@ -52,7 +52,26 @@ public final class Twitter4JService {
             }
         }
         else {
-            return Optional.of(cache.getCache(timelineType));
+            return Optional.of(cache.getCache("home"));
+        }
+    }
+
+    public Optional<List<SocialPost>> getTwitterUserTimeline() throws Twitter4JServiceException {
+        LOGGER.info("Getting Timeline.. ");
+
+        if (cache.getCache("user") == null) {
+            try {
+                List<SocialPost> socialPostList = cacheTimeline("user");
+
+                return Optional.of(socialPostList);
+            }
+            catch (TwitterException e) {
+                LOGGER.error("Error getting twitter timeline. ", e);
+                throw new Twitter4JServiceException();
+            }
+        }
+        else {
+            return Optional.of(cache.getCache("user"));
         }
     }
 

@@ -42,7 +42,7 @@ public class TwitterResources {
         try {
             LOGGER.info("Timeline received successfully.");
 
-            return twitter4JService.getTwitterTimeline("home")
+            return twitter4JService.getTwitterTimeline()
                     .map(socialPost -> Response.ok(socialPost)
                     .build())
                     .get();
@@ -67,7 +67,7 @@ public class TwitterResources {
         try {
             LOGGER.info("Timeline received successfully.");
 
-            return twitter4JService.getTwitterTimeline("user")
+            return twitter4JService.getTwitterUserTimeline()
                     .map(socialPost -> Response.ok(socialPost)
                             .build())
                     .get();
