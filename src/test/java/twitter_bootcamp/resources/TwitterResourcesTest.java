@@ -59,7 +59,7 @@ public class TwitterResourcesTest {
 
     @Test
     final void getTimeline_ResponseMatchesStatus() throws Exception {
-        when(twitter4JService.getTwitterTimeline("home")).thenReturn(Optional.of(socialPostList));
+        when(twitter4JService.getTwitterTimeline()).thenReturn(Optional.of(socialPostList));
         Response response = twitterResources.getTimeline();
 
         // test response data is what is expected
@@ -71,7 +71,7 @@ public class TwitterResourcesTest {
     @Test
     final void getTimeline_Twitter4JServiceExceptionThrownResponseStatusIsInternalServerError() throws Exception {
 
-        when(twitter4JService.getTwitterTimeline("home")).thenThrow(twitter4JServiceException);
+        when(twitter4JService.getTwitterTimeline()).thenThrow(twitter4JServiceException);
 
         Response response = twitterResources.getTimeline();
 
@@ -80,7 +80,7 @@ public class TwitterResourcesTest {
 
     @Test
     final void getUserTimeline_ResponseMatchesStatus() throws Exception {
-        when(twitter4JService.getTwitterTimeline("user")).thenReturn(Optional.of(socialPostList));
+        when(twitter4JService.getTwitterUserTimeline()).thenReturn(Optional.of(socialPostList));
         Response response = twitterResources.getUserTimeline();
 
         // test response data is what is expected
@@ -92,7 +92,7 @@ public class TwitterResourcesTest {
     @Test
     final void getUserTimeline_Twitter4JServiceExceptionThrownResponseStatusIsInternalServerError() throws Exception {
 
-        when(twitter4JService.getTwitterTimeline("user")).thenThrow(twitter4JServiceException);
+        when(twitter4JService.getTwitterUserTimeline()).thenThrow(twitter4JServiceException);
 
         Response response = twitterResources.getUserTimeline();
 
