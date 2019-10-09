@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
@@ -105,11 +104,11 @@ public class TwitterResourcesTest {
     final void postTweet_ResponseMatchesStatus() throws Exception {
         String message = "testString";
 
-        when(twitter4JService.sendTweet(message)).thenReturn(Optional.of(socialPost));
+        when(twitter4JService.sendTweet(socialPost.getMessage())).thenReturn(Optional.of(socialPost));
         when(mockStatus.getUser()).thenReturn(user);
         when(user.getName()).thenReturn("Test User");
 
-        Response response = twitterResources.postTweet(tweet);
+        Response response = twitterResources.postTweet(socialPost);
 
         // test response data is what is expected
         assertEquals(socialPost, response.getEntity());
@@ -121,9 +120,9 @@ public class TwitterResourcesTest {
     final void postTweet_Twitter4JServiceExceptionThrownResponseBadRequest() throws Exception {
         String message = "testString";
 
-        when(twitter4JService.sendTweet(message)).thenThrow(twitter4JServiceException);
+        when(twitter4JService.sendTweet(socialPost.getMessage())).thenThrow(twitter4JServiceException);
 
-        Response response = twitterResources.postTweet(tweet);
+        Response response = twitterResources.postTweet(socialPost);
 
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
@@ -132,7 +131,7 @@ public class TwitterResourcesTest {
     final void postTweet_NonTwitter4JServiceExceptionThrownResponseInternalServerError() throws Twitter4JServiceException {
         when(twitter4JService.sendTweet(tweet)).thenThrow(runtimeException);
 
-        Response response = twitterResources.postTweet(tweet);
+        Response response = twitterResources.postTweet(socialPost);
 
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
