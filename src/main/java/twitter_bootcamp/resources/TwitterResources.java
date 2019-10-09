@@ -1,6 +1,7 @@
 package twitter_bootcamp.resources;
 
 
+import jdk.nashorn.internal.parser.JSONParser;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.JSONObject;
 import twitter_bootcamp.TwitterApp;
 import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
@@ -117,13 +119,17 @@ public class TwitterResources {
 
     @POST
     @Path("/tweet")
-    public Response postTweet(@FormParam("message") @NotEmpty String message) {
+    public Response postTweet(String message) {
         LOGGER.info("POST request to send a tweet received. ");
+
+        JSONObject obj = new JSONObject(message);
+        String testMsg = obj.getString("message");
 
         try {
             LOGGER.info("Tweet successfully sent. ");
-            return twitter4JService.sendTweet(message)
+            return twitter4JService.sendTweet(testMsg)
                     .map(sentTweet -> Response.ok(sentTweet)
+                    .type(MediaType.APPLICATION_JSON)
                     .build())
                     .get();
 
@@ -134,6 +140,7 @@ public class TwitterResources {
             return Response
                     .status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage())
+                    .type(MediaType.APPLICATION_JSON)
                     .build();
 
         }
@@ -143,6 +150,7 @@ public class TwitterResources {
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("There was an issue posting your tweet. Please try again in a few minutes.")
+                    .type(MediaType.APPLICATION_JSON)
                     .build();
         }
     }
