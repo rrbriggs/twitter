@@ -123,11 +123,11 @@ public class TwitterResources {
         LOGGER.info("POST request to send a tweet received. ");
 
         JSONObject obj = new JSONObject(message);
-        String testMsg = obj.getString("message");
+        String strMessage = obj.getString("message");
 
         try {
             LOGGER.info("Tweet successfully sent. ");
-            return twitter4JService.sendTweet(testMsg)
+            return twitter4JService.sendTweet(strMessage)
                     .map(sentTweet -> Response.ok(sentTweet)
                     .type(MediaType.APPLICATION_JSON)
                     .build())
