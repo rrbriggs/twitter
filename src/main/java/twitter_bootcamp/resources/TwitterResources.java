@@ -120,7 +120,6 @@ public class TwitterResources {
     public Response postTweet(SocialPost body) {
         String message = body.getMessage();
         LOGGER.info("POST request to send a tweet received. ");
-        System.out.println(String.valueOf(message));
 
         try {
             LOGGER.info("Tweet successfully sent. ");
