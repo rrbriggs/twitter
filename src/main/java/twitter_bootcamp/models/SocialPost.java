@@ -25,6 +25,7 @@ public class SocialPost {
         return message;
     }
 
+    @JsonProperty
     public void setMessage(String message) {
         this.message = message;
     }

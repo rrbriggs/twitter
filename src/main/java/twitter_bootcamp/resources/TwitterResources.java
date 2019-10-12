@@ -1,6 +1,7 @@
 package twitter_bootcamp.resources;
 
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import jdk.nashorn.internal.parser.JSONParser;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -114,13 +115,16 @@ public class TwitterResources {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/tweet")
-    public Response postTweet(SocialPost message) {
+    public Response postTweet(SocialPost body) {
+        String message = body.getMessage();
         LOGGER.info("POST request to send a tweet received. ");
+        System.out.println(String.valueOf(message));
 
         try {
             LOGGER.info("Tweet successfully sent. ");
-            return twitter4JService.sendTweet(message.getMessage())
+            return twitter4JService.sendTweet(message)
                     .map(sentTweet -> Response.ok(sentTweet)
                     .type(MediaType.APPLICATION_JSON)
                     .build())
