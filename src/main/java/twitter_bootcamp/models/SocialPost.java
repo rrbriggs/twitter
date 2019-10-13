@@ -1,5 +1,7 @@
 package twitter_bootcamp.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class SocialPost {
@@ -7,6 +9,8 @@ public class SocialPost {
     private Date createdAt;
     private SocialUser user;
     private String postID;
+
+    public SocialPost() {}
 
     public String getPostID() { return postID; }
 
@@ -16,10 +20,12 @@ public class SocialPost {
 
     public void setSocialUser(SocialUser user) { this.user = user; }
 
+    @JsonProperty
     public String getMessage() {
         return message;
     }
 
+    @JsonProperty
     public void setMessage(String message) {
         this.message = message;
     }

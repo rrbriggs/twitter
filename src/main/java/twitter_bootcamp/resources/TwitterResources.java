@@ -1,21 +1,20 @@
 package twitter_bootcamp.resources;
 
 
+import javax.print.attribute.standard.Media;
+import javax.ws.rs.*;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.JSONObject;
 import twitter_bootcamp.TwitterApp;
+import twitter_bootcamp.models.SocialPost;
 import twitter_bootcamp.services.Twitter4JService;
 import twitter_bootcamp.services.Twitter4JServiceException;
 
@@ -116,14 +115,17 @@ public class TwitterResources {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/tweet")
-    public Response postTweet(@FormParam("message") @NotEmpty String message) {
+    public Response postTweet(SocialPost body) {
+        String message = body.getMessage();
         LOGGER.info("POST request to send a tweet received. ");
 
         try {
             LOGGER.info("Tweet successfully sent. ");
             return twitter4JService.sendTweet(message)
                     .map(sentTweet -> Response.ok(sentTweet)
+                    .type(MediaType.APPLICATION_JSON)
                     .build())
                     .get();
 
@@ -134,6 +136,7 @@ public class TwitterResources {
             return Response
                     .status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage())
+                    .type(MediaType.APPLICATION_JSON)
                     .build();
 
         }
@@ -143,6 +146,7 @@ public class TwitterResources {
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("There was an issue posting your tweet. Please try again in a few minutes.")
+                    .type(MediaType.APPLICATION_JSON)
                     .build();
         }
     }
