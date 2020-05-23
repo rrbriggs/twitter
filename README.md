@@ -3,10 +3,11 @@
 This application has the basic functionality of:
 1: Sending a tweet
 2: Viewing your Timeline
+3: Filter your Timeline
 
 ## Building and running with Gradle:
 
-Clone the repo with `git clone git@github.com:rrbriggs/twitter.git`
+Clone the repo with `git clone https://github.com/rrbriggs/twitter-app.git`
 
 *This application requires an app_config.yml file that contains your Twitter tokens and keys.
 There an example file called (app_config-example.yml) that lives in the config folder of this project.
